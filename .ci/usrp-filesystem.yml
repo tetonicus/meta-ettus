@@ -46,6 +46,10 @@ parameters:
     displayName: Override linux source
     type: boolean
     default: false
+  - name: ext_uhd
+    displayName: Override UHD source
+    type: boolean
+    default: true
   - name: build_e310_sg1
     displayName: Build e310_sg1
     type: boolean
@@ -78,6 +82,11 @@ resources:
       name: EttusResearch/linuxdev
       ref: refs/heads/usrp-v5.10
       endpoint: EttusResearch
+    - repository: uhddev
+      type: github
+      name: EttusResearch/uhddev
+      ref: refs/heads/master
+      endpoint: EttusResearch
 
 variables:
   - name: AUTO_CONF
@@ -108,9 +117,12 @@ stages:
             - x4xx
         auto_conf: $AUTO_CONF
         prebuild_steps:
-          - ${{ if parameters.ext_linux }}:
+          - ${{ if or(parameters.ext_linux, parameters.ext_uhd) }}:
             - script: |
                 rm $AUTO_CONF
+                touch $AUTO_CONF
+          - ${{ if parameters.ext_linux }}:
+            - script: |
                 cat <<EOF >>$AUTO_CONF
                 PREFERRED_PROVIDER_virtual/kernel = "linux-usrp"
                 PREFERRED_VERSION_linux-yocto = "5.10%"
@@ -122,6 +134,16 @@ stages:
                 repository: linuxdev
                 packages:
                   - linux-usrp
+          - ${{ if parameters.ext_uhd }}:
+            - template: templates/oe_localconf_externalsrc.yml
+              parameters:
+                conf_file: $AUTO_CONF
+                repository: uhddev
+                package_paths:
+                  - package: 'uhd'
+                    path: 'host'
+                  - package: 'mpmd'
+                    path: 'mpm'
 
 - stage: x4xx_hardware_test
   displayName: Run x4xx hardware test
