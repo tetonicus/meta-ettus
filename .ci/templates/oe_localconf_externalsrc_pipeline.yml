@@ -8,6 +8,10 @@ parameters:
   # The name of the pipeline to download artifact from
   - name: pipeline
     type: string
+  # The file patterns to download from the pipeline
+  - name: patterns
+    type: string
+    default: ""
   # The artifacts to download from the pipeline
   - name: artifacts
     type: object
@@ -32,7 +36,18 @@ steps:
   - ${{ each artifact in parameters.artifacts }}:
     - download: ${{ parameters.pipeline }}
       artifact: ${{ artifact }}
-      displayName: Download ${{ artifact }}
+      ${{ if not(eq(parameters.patterns, '')) }}:
+        displayName: Download ${{ artifact }} with patterns ${{ parameters.patterns }}
+        patterns: ${{ parameters.patterns }}
+      ${{ else }}:
+        displayName: Download ${{ artifact }}
+  - ${{ if eq(length(parameters.artifacts), 0) }}:
+    - download: ${{ parameters.pipeline }}
+      ${{ if not(eq(parameters.patterns, '')) }}:
+        displayName: Download all artifacts with patterns ${{ parameters.patterns }}
+        patterns: ${{ parameters.patterns }}
+      ${{ else }}:
+        displayName: Download ${{ artifact }}
   - download: ${{ parameters.pipeline }}
     displayName: Download artifacts from ${{ parameters.pipeline }}
     condition: and(succeeded(), ${{ eq(length(parameters.artifacts), 0) }})

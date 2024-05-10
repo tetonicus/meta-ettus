@@ -50,6 +50,10 @@ parameters:
     displayName: Override UHD source
     type: boolean
     default: true
+  - name: ext_fpga
+    displayName: Override FPGA sources
+    type: boolean
+    default: true
   - name: build_e310_sg1
     displayName: Build e310_sg1
     type: boolean
@@ -76,6 +80,9 @@ resources:
     - pipeline: usrp-kas-pipeline
       source: 'usrp-kas'
       branch: zeus-ci
+    - pipeline: uhddev-fpga-pipeline
+      source: 'uhddev fpga pipeline'
+      branch: master
   repositories:
     - repository: linuxdev
       type: github
@@ -117,7 +124,7 @@ stages:
             - x4xx
         auto_conf: $AUTO_CONF
         prebuild_steps:
-          - ${{ if or(parameters.ext_linux, parameters.ext_uhd) }}:
+          - ${{ if or(parameters.ext_linux, parameters.ext_uhd, parameters.ext_fpga) }}:
             - script: |
                 rm $AUTO_CONF
                 touch $AUTO_CONF
@@ -144,6 +151,22 @@ stages:
                     path: 'host'
                   - package: 'mpmd'
                     path: 'mpm'
+          - ${{ if parameters.ext_fpga }}:
+            - template: templates/oe_localconf_externalsrc_pipeline.yml
+              parameters:
+                conf_file: $AUTO_CONF
+                pipeline: uhddev-fpga-pipeline
+                patterns: |
+                  usrp_e310_*_fpga.*
+                  usrp_e320_fpga_*.*
+                  usrp_n3??_fpga_*.*
+                  usrp_x4??_fpga_*.*
+                packages:
+                - uhd-fpga-images
+                flatten: true
+            - script: |
+                ls -l $(Agent.BuildDirectory)/uhddev-fpga-pipeline
+              displayName: list fpga images
 
 - stage: x4xx_hardware_test
   displayName: Run x4xx hardware test
