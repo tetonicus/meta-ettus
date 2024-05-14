@@ -68,12 +68,22 @@ FPGA_SUBDIRECTORY ??= ""
 
 do_download_uhd_images_append_ni-titanium() {
     if [ -n "${EXTERNALSRC}" ]; then
-        ln -sf "${S}/${FPGA_SUBDIRECTORY}/${DEFAULT_BITFILE_NAME_X410}.bit" "${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X410}.bit"
-        ln -sf "${S}/${FPGA_SUBDIRECTORY}/${DEFAULT_BITFILE_NAME_X410}.dts" "${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X410}.dts"
-        ln -sf "${S}/${FPGA_SUBDIRECTORY}/${DEFAULT_BITFILE_NAME_X440}.bit" "${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X440}.bit"
-        ln -sf "${S}/${FPGA_SUBDIRECTORY}/${DEFAULT_BITFILE_NAME_X440}.dts" "${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X440}.dts"
+        if [ -h "${UHD_IMAGES_DOWNLOAD_DIR}" ]; then
+            bbwarn "removing existing symlink ${UHD_IMAGES_DOWNLOAD_DIR}"
+            rm ${UHD_IMAGES_DOWNLOAD_DIR}
+        elif [ -d "${UHD_IMAGES_DOWNLOAD_DIR}" ]; then
+            bbwarn "removing existing directory ${UHD_IMAGES_DOWNLOAD_DIR}"
+            rm -r ${UHD_IMAGES_DOWNLOAD_DIR}
+        fi
+        bbnote "Setting symlink ${UHD_IMAGES_DOWNLOAD_DIR} -> ${S}/${FPGA_SUBDIRECTORY}"
+        ln -s "${S}/${FPGA_SUBDIRECTORY}" "${UHD_IMAGES_DOWNLOAD_DIR}"
+        touch ${UHD_IMAGES_DOWNLOAD_DIR}/inventory.json
     else
         python3 ${WORKDIR}/set-symlinks.py -i ${UHD_IMAGES_DOWNLOAD_DIR} -d ${UHD_IMAGES_DOWNLOAD_DIR}
+        # as long as no x420 bitfiles are availabe, copy the default x440 bitfile
+        for EXT in bit bit.md5 dts dts.md5 rpt; do
+            cp ${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X440}.$EXT ${UHD_IMAGES_DOWNLOAD_DIR}/${DEFAULT_BITFILE_NAME_X420}.$EXT
+        done
     fi
 }
 
