@@ -1,4 +1,0 @@
-DISTRO = "xilinx-standalone"
-MACHINE = "zynqmp-pmu"
-TMPDIR = "${TOPDIR}/tmp-xilinx"
-SHUTDOWN_FLAGS_pn-pmu-firmware = ""

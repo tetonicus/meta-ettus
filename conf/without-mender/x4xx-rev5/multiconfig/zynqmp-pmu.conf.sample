@@ -1,3 +1,0 @@
-DISTRO = "xilinx-standalone"
-MACHINE = "zynqmp-pmu"
-TMPDIR = "${TOPDIR}/tmp-xilinx"
