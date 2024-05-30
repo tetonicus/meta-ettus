@@ -1,12 +1,14 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+MPM_DEVICE:ni-sulfur = "n3xx"
 
-SRC_URI_append_ni-sulfur = " file://usrp_shutdown.py \
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI:append:ni-sulfur = " file://usrp_shutdown.py \
                            "
 
-FILES_${PN}-tools_append_ni-sulfur = " \
+FILES:${PN}-tools:append:ni-sulfur = " \
                                 /lib/systemd/system-shutdown/usrp_shutdown.py \
                                "
 
-do_install_append_ni-sulfur() {
+do_install:append:ni-sulfur() {
     install -D -m 0577 ${WORKDIR}/usrp_shutdown.py ${D}/lib/systemd/system-shutdown/usrp_shutdown.py
 }

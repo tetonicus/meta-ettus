@@ -1,1 +1,1 @@
-PACKAGECONFIG_append_ni-sulfur = " networkd resolved"
+PACKAGECONFIG:append:ni-sulfur = " networkd resolved"
