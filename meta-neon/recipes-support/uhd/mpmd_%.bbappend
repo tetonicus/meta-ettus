@@ -1,5 +1,5 @@
-MPM_DEVICE_ni-neon = "e320"
+MPM_DEVICE:ni-neon = "e320"
 
-RDEPENDS_${PN}_append_ni-neon = " \
-    linux-firmware-ni-neon-fpga \
-"
+# RDEPENDS:${PN}:append:ni-neon = " \
+#     linux-firmware-ni-neon-fpga \
+# "

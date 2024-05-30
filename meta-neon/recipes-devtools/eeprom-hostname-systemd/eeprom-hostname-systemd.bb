@@ -1,19 +1,20 @@
 require includes/maintainer-ettus.inc
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 DESCRIPTION = "Hostname utility for the Ettus Research Neon SDR"
 PV="0.10"
 
-LICENSE = "GPLv2"
+LICENSE = "GPLv2+"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/COPYING;md5=b234ee4d69f5fce4486a80fdaf4a4263"
 
 PR="r1"
 
 COMPATIBLE_MACHINE = "ni-neon"
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 inherit systemd
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN}= "hostname-serial.service"
+SYSTEMD_SERVICE:${PN}= "hostname-serial.service"
 
 SRC_URI = " \
            file://COPYING \
@@ -21,12 +22,12 @@ SRC_URI = " \
            file://hostname-serial.service \
           "
 
-FILES_${PN} = "${base_libdir}/systemd/system/ \
+FILES:${PN} = "${base_libdir}/systemd/system/ \
                ${base_sbindir} \
               "
-RDEPENDS_${PN} = "bash mpmd-tools"
+RDEPENDS:${PN} = "bash mpmd-tools"
 
-do_install_append() {
+do_install:append() {
 	install -d ${D}${base_libdir}/systemd/system
 	install -d ${D}${base_sbindir}
 	install -m 0644 ${WORKDIR}/hostname-serial.service ${D}${base_libdir}/systemd/system/

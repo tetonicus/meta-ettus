@@ -1,1 +1,1 @@
-PACKAGECONFIG_append_ni-neon = " networkd resolved"
+PACKAGECONFIG:append:ni-neon = " networkd resolved"

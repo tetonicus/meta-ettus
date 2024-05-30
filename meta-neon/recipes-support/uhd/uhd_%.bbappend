@@ -1,1 +1,1 @@
-PACKAGECONFIG_ni-neon = "mpmd python"
+PACKAGECONFIG:ni-neon = "mpmd python"
