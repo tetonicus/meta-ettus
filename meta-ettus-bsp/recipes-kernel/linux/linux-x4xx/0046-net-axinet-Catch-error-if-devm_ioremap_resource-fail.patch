@@ -1,0 +1,30 @@
+From 0fb2d59f1bc304bb1643db8b183aba729b00889e Mon Sep 17 00:00:00 2001
+From: Joerg Hofrichter <joerg.hofrichter@ni.com>
+Date: Wed, 28 Jun 2023 14:07:44 +0200
+Subject: [PATCH 46/47] net: axinet: Catch error if devm_ioremap_resource
+ failed
+
+---
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 3911718d5618..74429f19ee94 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2829,9 +2829,11 @@ static int __maybe_unused axienet_dma_probe(struct platform_device *pdev,
+ 			if (ret >= 0) {
+ 				q->dma_regs = devm_ioremap_resource(&pdev->dev,
+ 								    &dmares);
+-			} else {
++			}
++			if ((ret < 0) || IS_ERR(q->dma_regs)) {
+ 				dev_err(&pdev->dev, "unable to get DMA resource for %pOF\n",
+ 					np);
++				of_node_put(np);
+ 				return -ENODEV;
+ 			}
+ 			q->eth_hasdre = of_property_read_bool(np,
+-- 
+2.34.1
+
