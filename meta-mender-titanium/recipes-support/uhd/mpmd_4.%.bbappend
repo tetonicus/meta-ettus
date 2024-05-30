@@ -1,6 +1,6 @@
-FILES_${PN}_append_ni-titanium-mender = " /data/network/*"
+FILES:${PN}:append:ni-titanium-mender = " /data/network/*"
 
-do_install_append_ni-titanium-mender() {
+do_install:append:ni-titanium-mender() {
     install -d ${D}/data/network/
     for FILENAME in ${D}${base_libdir}/systemd/network/*; do
         # When installing the .network files, "40-" is prepended by mpmd.inc
@@ -13,7 +13,7 @@ do_install_append_ni-titanium-mender() {
     done
 }
 
-pkg_postinst_ontarget_${PN}() {
+pkg_postinst_ontarget:${PN}() {
     for FILENAME in ${base_libdir}/systemd/network/*.network; do
         if [ -h $FILENAME ] && [ ! -e $FILENAME ]; then
             echo "File $FILENAME is not existing, copying .sample file"

@@ -1,14 +1,14 @@
 inherit uhd_images_downloader
 
-LICENSE = "LGPLv3+"
+LICENSE = "LGPL-3.0-or-later"
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /lib/firmware/ni/cpld-x410-*.* \
     /lib/firmware/ni/cpld-zbx-*.* \
     /lib/firmware/ni/cpld-x440-*.* \
     "
 
-UHD_IMAGES_TO_DOWNLOAD_ni-titanium ?= " \
+UHD_IMAGES_TO_DOWNLOAD:ni-titanium ?= " \
     ${@ '' if d.getVar('EXTERNALSRC') else 'x4xx_x410_cpld_default'} \
     ${@ '' if d.getVar('EXTERNALSRC') else 'x4xx_x440_cpld_default'} \
     ${@ '' if d.getVar('EXTERNALSRC') else 'x4xx_zbx_cpld_default'} \

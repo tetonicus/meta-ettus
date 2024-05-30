@@ -1,1 +1,1 @@
-PACKAGECONFIG_ni-titanium = "mpmd python docs"
+PACKAGECONFIG:ni-titanium = "mpmd python docs"

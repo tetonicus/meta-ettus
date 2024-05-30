@@ -1,6 +1,6 @@
 require includes/maintainer-ettus.inc
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 DESCRIPTION = "LED control for Ettus Research Titanium SDR"
 PV="0.1"
 
@@ -12,7 +12,7 @@ COMPATIBLE_MACHINE = "ni-titanium"
 
 inherit systemd
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN}= "\
+SYSTEMD_SERVICE:${PN}= "\
         ledctrl-led0.service \
         ledctrl-led1.service \
         ledctrl-led2.service \
@@ -26,12 +26,12 @@ SRC_URI = " \
            file://ledctrl-led2.service \
            "
 
-FILES_${PN} = "${base_libdir}/systemd/system/ \
+FILES:${PN} = "${base_libdir}/systemd/system/ \
                ${base_sbindir} \
               "
-RDEPENDS_${PN} = "bash"
+RDEPENDS:${PN} = "bash"
 
-do_install_append() {
+do_install:append() {
 	install -d ${D}${base_libdir}/systemd/system
 	install -d ${D}${base_sbindir}
 	install -m 0644 ${WORKDIR}/ledctrl-led*.service ${D}${base_libdir}/systemd/system/
