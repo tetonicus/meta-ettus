@@ -17,7 +17,7 @@ index 46c17b4..b1c95ec 100644
  LAYERVERSION_openamp-layer = "1"
  
 -LAYERSERIES_COMPAT_openamp-layer = "rocko sumo thud warrior"
-+LAYERSERIES_COMPAT_openamp-layer = "rocko sumo thud warrior zeus"
++LAYERSERIES_COMPAT_openamp-layer = "rocko sumo thud warrior zeus kirkstone"
 -- 
 2.17.1
 

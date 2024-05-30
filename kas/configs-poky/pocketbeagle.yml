@@ -1,0 +1,13 @@
+header:
+  version: 10
+  includes:
+  - '../include/poky.yml'
+  - '../include/meta-ettus-core.yml'
+repos:
+  meta-pocketbeagle:
+    url: https://github.com/e-ale/meta-pocketbeagle.git
+    branch: kirkstone
+machine: pocketbeagle
+target:
+- flashing-image
+- uhd-minimal-image

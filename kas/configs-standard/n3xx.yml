@@ -1,0 +1,9 @@
+header:
+  version: 10
+  includes:
+    - ../include/base-standard.yml
+machine: ni-sulfur-rev11
+repos:
+  meta-ettus:
+    layers:
+      meta-sulfur:

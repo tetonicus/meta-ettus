@@ -1,0 +1,10 @@
+header:
+  version: 10
+  includes:
+  - '../include/poky.yml'
+  - '../include/meta-ettus-core.yml'
+  - '../include/meta-ettus-bsp.yml'
+machine: ni-neon-rev2
+target:
+- flashing-image
+- uhd-minimal-image

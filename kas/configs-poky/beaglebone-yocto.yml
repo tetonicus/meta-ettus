@@ -1,0 +1,15 @@
+header:
+  version: 10
+  includes:
+  - '../include/poky.yml'
+  - '../include/meta-ettus-core.yml'
+repos:
+  meta-yocto-bsp:
+    url: https://git.yoctoproject.org/meta-yocto
+    branch: kirkstone
+    layers:
+      meta-yocto-bsp:
+machine: beaglebone-yocto
+target:
+- flashing-image
+- uhd-minimal-image

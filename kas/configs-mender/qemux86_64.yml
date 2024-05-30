@@ -1,7 +1,7 @@
 header:
   version: 10
   includes:
-    - base.yml
+    - ../include/base-mender.yml
 machine: qemux86-64
 target:
-  - gnuradio-image
+  - deployment-image

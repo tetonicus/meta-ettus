@@ -1,7 +1,7 @@
 header:
   version: 10
   includes:
-    - base.yml
+    - ../include/base-mender.yml
 machine: ni-sulfur-rev11-mender
 env:
   MENDER_ARTIFACT_NAME: git_n3xx

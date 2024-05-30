@@ -1,0 +1,11 @@
+header:
+  version: 10
+  includes:
+    - ../include/base-standard.yml
+machine: ni-e31x-sg3
+repos:
+  meta-ettus:
+    layers:
+      meta-e31x:
+
+

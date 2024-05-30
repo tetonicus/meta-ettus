@@ -1,0 +1,89 @@
+header:
+  version: 10
+distro: Alchemy
+target:
+  - gnuradio-image
+env:
+  MENDER_ARTIFACT_NAME: git
+local_conf_header:
+  mender: |
+    INHERIT += "mender-full"
+    PREFERRED_PROVIDER_mender = "mender-client"
+  licenses: |
+    COPY_LIC_MANIFEST = "1"
+    COPY_LIC_DIRS = "1"
+repos:
+  meta-ettus:
+    layers:
+      meta-ettus-backports:
+      meta-ettus-bsp:
+      meta-ettus-core:
+      meta-alchemy:
+  bitbake:
+    url: https://github.com/openembedded/bitbake
+    commit: ee090484cc25d760b8c20f18add17b5eff485b40
+    path: bitbake
+    layers:
+      .: excluded
+  meta-openembedded:
+    url: https://github.com/openembedded/meta-openembedded
+    commit: 730e44900a0a86265bad93a16b5a5ff344a07266
+    path: meta-oe
+    layers:
+      meta-oe:
+      meta-filesystems:
+      meta-networking:
+      meta-python:
+      meta-webserver:
+    patches:
+      patch0:
+        repo: meta-ettus
+        path: kas/patches/meta-oe/0001-python3-zopeevent-Add-Zope.Event-Python-Recipe.patch
+      patch1:
+        repo: meta-ettus
+        path: kas/patches/meta-oe/0002-python3-gevent-adding-missing-dependency-to-python3-.patch
+  openembedded-core:
+    url: https://github.com/openembedded/openembedded-core
+    commit: a744a897f0ea7d34c31c024c13031221f9a85f24
+    path: oe-core
+    layers:
+      meta:
+    patches:
+      patch0:
+        repo: meta-ettus
+        path: kas/patches/oe-core/0001-wic-filemap-catch-StopIteration-from-next-iterator.patch
+    # patches:
+    #   patch0:
+    #     repo: meta-ettus
+    #     path: kas/patches/oe-core/0001-feature-microblaze-versions.inc-Update-MB-to-v11.0.patch
+    #   patch1:
+    #     repo: meta-ettus
+    #     path: kas/patches/oe-core/0001-kernel.bbclass-Fix-Module.symvers-support.patch
+    #   patch2:
+    #     repo: meta-ettus
+    #     path: kas/patches/oe-core/0002-microblaze-tune-Allow-no-version-to-be-set.patch
+  meta-mender:
+    url: https://github.com/mendersoftware/meta-mender
+    commit: f1e234a7c16898ec93e7161d29a6875153a70400
+    layers:
+      meta-mender-core:
+    patches:
+      patch0:
+        repo: meta-ettus
+        path: kas/patches/meta-mender/0001-meta-mender-core-u-boot-adopt-patch-0003-to-kirkston.patch
+  meta-security:
+    url: git://git.yoctoproject.org/meta-security
+    commit: 1a3e42cedbd94ca73be45800d0e902fec35d0f0f
+    layers:
+      meta-tpm:
+  meta-qt5:
+    url: https://github.com/meta-qt5/meta-qt5
+    commit: fe0bf7f0e5408aac6cc89ff3b19b1b1941df4f64
+  meta-sdr:
+    # url: https://github.com/EttusResearch/meta-sdr
+    url: https://github.com/balister/meta-sdr
+    commit: 382a4c6534832ad47fab417305ffb0f38bf88a7d
+    # patches:
+    #   patch0:
+    #     repo: meta-ettus
+    #     path: kas/patches/meta-sdr/0001-gr-ettus-recipe-is-not-needed-for-UHD-4.x-and-Gnurad.patch

@@ -1,0 +1,11 @@
+header:
+  version: 10
+repos:
+  meta-openembedded:
+    url: https://git.openembedded.org/meta-openembedded
+    branch: kirkstone
+    layers:
+      meta-oe:
+  meta-ettus:
+    layers:
+      meta-ettus-core:

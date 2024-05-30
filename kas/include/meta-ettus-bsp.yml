@@ -1,0 +1,7 @@
+header:
+  version: 10
+repos:
+  meta-ettus:
+    layers:
+      meta-ettus-backports:
+      meta-ettus-bsp:

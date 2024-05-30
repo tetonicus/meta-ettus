@@ -1,0 +1,14 @@
+header:
+  version: 10
+repos:
+  poky:
+    url: https://git.yoctoproject.org/poky
+    branch: kirkstone
+    layers:
+      meta:
+      meta-poky:
+local_conf_header:
+  'root-login without password': |
+    IMAGE_FEATURES += "debug-tweaks"
+  'also build rootfs tar.xz': |
+    IMAGE_FSTYPES += "tar.xz"

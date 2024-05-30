@@ -1,0 +1,10 @@
+header:
+  version: 10
+  includes:
+    - ../include/base-standard.yml
+machine: qemuarm64
+target:
+  - deployment-image
+local_conf_header:
+  "remove packagegroup-core-boot from rootfs":
+    CORE_IMAGE_BASE_INSTALL:remove = "packagegroup-core-boot"

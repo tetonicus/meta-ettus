@@ -1,0 +1,27 @@
+From dd75a00257aa1b141c897cbf252138f326443471 Mon Sep 17 00:00:00 2001
+From: Joerg Hofrichter <joerg.hofrichter@ni.com>
+Date: Wed, 21 Feb 2024 16:49:08 +0100
+Subject: [PATCH 2/2] python3-gevent: adding missing dependency to
+ python3-zopeevent
+
+and python3-zopeinterface
+---
+ meta-python/recipes-devtools/python/python3-gevent_21.12.0.bb | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/meta-python/recipes-devtools/python/python3-gevent_21.12.0.bb b/meta-python/recipes-devtools/python/python3-gevent_21.12.0.bb
+index fd6b0f531..75e86e255 100644
+--- a/meta-python/recipes-devtools/python/python3-gevent_21.12.0.bb
++++ b/meta-python/recipes-devtools/python/python3-gevent_21.12.0.bb
+@@ -9,6 +9,8 @@ DEPENDS += "${PYTHON_PN}-greenlet libev c-ares"
+ RDEPENDS:${PN} = "${PYTHON_PN}-greenlet \
+ 		  ${PYTHON_PN}-mime \
+ 		  ${PYTHON_PN}-pprint \
++		  ${PYTHON_PN}-zopeevent \
++		  ${PYTHON_PN}-zopeinterface \
+ 		 "
+ 
+ SRC_URI[sha256sum] = "f48b64578c367b91fa793bf8eaaaf4995cb93c8bc45860e473bf868070ad094e"
+-- 
+2.34.1
+

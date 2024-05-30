@@ -1,0 +1,78 @@
+From d91482058932ced0a1b07ca97e1bd67d6ad00f82 Mon Sep 17 00:00:00 2001
+From: Joerg Hofrichter <joerg.hofrichter@ni.com>
+Date: Tue, 30 Apr 2024 14:35:50 +0200
+Subject: [PATCH] meta-mender-core: u-boot: adopt patch 0003 to kirkstone
+
+Signed-off-by: Joerg Hofrichter <joerg.hofrichter@ni.com>
+---
+ ...tion-of-Mender-boot-code-into-U-Boot.patch | 24 +++++++++----------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
+
+diff --git a/meta-mender-core/recipes-bsp/u-boot/patches/0003-Integration-of-Mender-boot-code-into-U-Boot.patch b/meta-mender-core/recipes-bsp/u-boot/patches/0003-Integration-of-Mender-boot-code-into-U-Boot.patch
+index e3a5cb0b..5199f423 100644
+--- a/meta-mender-core/recipes-bsp/u-boot/patches/0003-Integration-of-Mender-boot-code-into-U-Boot.patch
++++ b/meta-mender-core/recipes-bsp/u-boot/patches/0003-Integration-of-Mender-boot-code-into-U-Boot.patch
+@@ -1,42 +1,43 @@
+-From 6802750fbe50f8c75a6678493464347958df761b Mon Sep 17 00:00:00 2001
++From 13f2eb41ae61b0e595be3dffa76c737d33128ca7 Mon Sep 17 00:00:00 2001
+ From: Marcin Pasinski <marcin.pasinski@northern.tech>
+ Date: Wed, 31 Jan 2018 18:10:04 +0100
+-Subject: [PATCH 3/3] Integration of Mender boot code into U-Boot.
++Subject: [PATCH] Integration of Mender boot code into U-Boot.
+ 
+ Signed-off-by: Kristian Amlie <kristian.amlie@mender.io>
+ Signed-off-by: Maciej Borzecki <maciej.borzecki@rndity.com>
+ Signed-off-by: Marcin Pasinski <marcin.pasinski@northern.tech>
++
+ ---
+  include/env_default.h     | 3 +++
+  scripts/Makefile.autoconf | 3 ++-
+  2 files changed, 5 insertions(+), 1 deletion(-)
+ 
+ diff --git a/include/env_default.h b/include/env_default.h
+-index 23430dc70d..a8c782c725 100644
++index 86b639d3e2..f56a1135f8 100644
+ --- a/include/env_default.h
+ +++ b/include/env_default.h
+-@@ -10,6 +10,8 @@
++@@ -9,6 +9,8 @@
++ 
+  #include <env_callback.h>
+- #include <linux/stringify.h>
+  
+ +#include <env_mender.h>
+ +
+  #ifdef DEFAULT_ENV_INSTANCE_EMBEDDED
+- env_t embedded_environment __UBOOT_ENV_SECTION__(environment) = {
++ env_t environment __UBOOT_ENV_SECTION__(environment) = {
+  	ENV_CRC,	/* CRC Sum */
+-@@ -24,6 +26,7 @@ char default_environment[] = {
++@@ -21,6 +23,7 @@ static char default_environment[] = {
+  #else
+- const char default_environment[] = {
++ const uchar default_environment[] = {
+  #endif
+ +	MENDER_ENV_SETTINGS
+  #ifndef CONFIG_USE_DEFAULT_ENV_FILE
+  #ifdef	CONFIG_ENV_CALLBACK_LIST_DEFAULT
+  	ENV_CALLBACK_VAR "=" CONFIG_ENV_CALLBACK_LIST_DEFAULT "\0"
+ diff --git a/scripts/Makefile.autoconf b/scripts/Makefile.autoconf
+-index 8a3efdb2db..5f09f52b24 100644
++index 00b8fb34aa..e312c8037d 100644
+ --- a/scripts/Makefile.autoconf
+ +++ b/scripts/Makefile.autoconf
+-@@ -108,7 +108,8 @@ define filechk_config_h
++@@ -109,7 +109,8 @@ define filechk_config_h
+  	echo \#include \<configs/$(CONFIG_SYS_CONFIG_NAME).h\>;		\
+  	echo \#include \<asm/config.h\>;				\
+  	echo \#include \<linux/kconfig.h\>;				\
+@@ -46,6 +47,3 @@ index 8a3efdb2db..5f09f52b24 100644
+  endef
+  
+  include/config.h: scripts/Makefile.autoconf create_symlink FORCE
+--- 
+-2.17.1
+-
+-- 
+2.34.1
+
