@@ -1,6 +1,6 @@
-FILES_${PN}_append_ni-e31x-mender = " /data/network/*"
+FILES:${PN}:append:ni-e31x-mender = " /data/network/*"
 
-do_install_append_ni-e31x-mender() {
+do_install:append:ni-e31x-mender() {
     install -d ${D}/data/network/
     for FILENAME in ${D}${base_libdir}/systemd/network/*; do
         # When installing the .network files, "40-" is prepended by mpmd.inc
@@ -13,7 +13,7 @@ do_install_append_ni-e31x-mender() {
     done
 }
 
-pkg_postinst_ontarget_${PN}() {
+pkg_postinst_ontarget:${PN}() {
     for FILENAME in ${base_libdir}/systemd/network/*.network; do
         if [ -h $FILENAME ] && [ ! -e $FILENAME ]; then
             echo "File $FILENAME is not existing, copying .sample file"

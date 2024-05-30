@@ -1,5 +1,5 @@
 
-do_install_append_ni-e31x-mender() {
+do_install:append:ni-e31x-mender() {
   if ${@bb.utils.contains('PACKAGECONFIG','networkd','true','false',d)}; then
         # copy systemd-network.service to sysconfdir, so that we can modify it
         install -d ${D}${sysconfdir}/systemd/system

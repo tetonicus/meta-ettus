@@ -1,1 +1,1 @@
-PACKAGECONFIG_ni-e31x = "mpmd python"
+PACKAGECONFIG:ni-e31x = "mpmd python"
