@@ -1,0 +1,32 @@
+From dabcc49c31297ae8aae8e37015ef5612b005ec8c Mon Sep 17 00:00:00 2001
+From: Joerg Hofrichter <joerg.hofrichter@ni.com>
+Date: Thu, 16 May 2024 13:02:40 +0200
+Subject: [PATCH] mpm: systemd: no IPv4 ADC for int0 interface
+
+Disable IPv4 Address Conflict Detection (ADC) for internal interface. This
+ensures that the IP address 169.254.0.1 is assigned immediately and the internal
+CHDR link is working immediately after starting MPM / after loading the bitfile.
+---
+ mpm/systemd/network/int0.network | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/mpm/systemd/network/int0.network b/mpm/systemd/network/int0.network
+index 67a04c322..20eba772a 100644
+--- a/mpm/systemd/network/int0.network
++++ b/mpm/systemd/network/int0.network
+@@ -2,8 +2,11 @@
+ Name=int0
+ 
+ [Network]
+-Address=169.254.0.1/24
+ IPForward=ipv4
+ 
++[Address]
++Address=169.254.0.1/24
++DuplicateAddressDetection=none
++
+ [Link]
+ MTUBytes=9000
+-- 
+2.34.1
+

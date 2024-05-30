@@ -1,6 +1,6 @@
 SUMMARY = "Universal Hardware Driver for Ettus Research products."
 HOMEPAGE = "http://www.ettus.com"
-LICENSE = "GPLv3+"
+LICENSE = "GPL-3.0-or-later"
 
 BBCLASSEXTEND = "native"
 
@@ -11,14 +11,14 @@ DEPENDS = "git-native python3-mako-native boost \
            qemu-native \
            python3-numpy \
           "
-RDEPENDS_${PN} += "python3-core python3-requests"
-RDEPENDS_${PN}-tests = "${PN} python3-ruamel-yaml"
-RDEPENDS_${PN}-examples = "${PN}"
-RDEPENDS_${PYTHON_PN}-${PN} = "${PN} python3-numpy"
-RRECOMMENDS_${PN}-tests = "python3-unittest-xml-reporting"
-RRECOMMENDS_${PN}_class-target += "uhd-fpga-images"
+RDEPENDS:${PN} += "python3-core python3-requests"
+RDEPENDS:${PN}-tests = "${PN} python3-ruamel-yaml"
+RDEPENDS:${PN}-examples = "${PN}"
+RDEPENDS:${PYTHON_PN}-${PN} = "${PN} python3-numpy"
+RRECOMMENDS:${PN}-tests = "python3-unittest-xml-reporting"
+RRECOMMENDS:${PN}:class-target += "uhd-fpga-images"
 
-inherit cmake python3-dir python3native deploy-docs run_tests
+inherit cmake python3-dir python3targetconfig deploy-docs run_tests
 require includes/maintainer-ettus.inc
 include uhd_auto_pkgv.inc
 
@@ -26,19 +26,19 @@ S = "${WORKDIR}/git/host"
 
 PACKAGES =+ "${PN}-tests ${PN}-examples ${PYTHON_PN}-${PN}"
 
-INSANE_SKIP_${PN} = "dev-so"
+INSANE_SKIP:${PN} = "dev-so"
 
-FILES_${PN} += "${libdir}/libuhd.so \
+FILES:${PN} += "${libdir}/libuhd.so \
                 ${libdir}/uhd/utils/*"
-FILES_${PN}-tests += "${libdir}/uhd/tests/*"
-FILES_${PN}-dev += "${libdir}/cmake/*"
-FILES_${PN}-dbg += "${libdir}/uhd/examples/.debug/* \
+FILES:${PN}-tests += "${libdir}/uhd/tests/*"
+FILES:${PN}-dev += "${libdir}/cmake/*"
+FILES:${PN}-dbg += "${libdir}/uhd/examples/.debug/* \
                     ${libdir}/uhd/utils/.debug/* \
                     ${libdir}/uhd/utils/latency/.debug/* \
                     ${libdir}/uhd/tests/.debug/* \
                     ${libdir}/uhd/usrp_e_utils/.debug/*"
-FILES_${PN}-examples = "${libdir}/uhd/examples/*"
-FILES_${PYTHON_PN}-${PN} = "${PYTHON_SITEPACKAGES_DIR}/uhd/*"
+FILES:${PN}-examples = "${libdir}/uhd/examples/*"
+FILES:${PYTHON_PN}-${PN} = "${PYTHON_SITEPACKAGES_DIR}/uhd/*"
 
 PACKAGECONFIG ??= "b100 b200 usrp1 usrp2 x300 mpmd python docs"
 PACKAGECONFIG[staticlibs] = "-DENABLE_STATIC_LIBS=ON,-DENABLE_STATIC_LIBS=OFF "

@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit uhd_images_downloader
 require includes/maintainer-ettus.inc
@@ -7,18 +7,16 @@ do_populate_lic[depends] += "${PN}:do_unpack"
 
 DEPENDS += "dtc-native python3-native"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://LICENSE.md \
     file://fpga_bit_to_bin.py \
     "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
-PACKAGES += "${PN}-firmware"
+PACKAGES += "${PN}-firmware ${PN}-inventory"
+RDEPENDS:${PN} += "${PN}-firmware ${PN}-inventory"
 
-ALLOW_EMPTY_${PN} = "1"
-ALLOW_EMPTY_${PN}-firmware = "1"
-
-LICENSE = "LGPLv3+"
+LICENSE = "LGPL-3.0-or-later"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/LICENSE.md;md5=2d2b59b2fc606f13eb2631fb80325865"
 
 UHD_IMAGES_INSTALL_PATH ?= "/usr/share/uhd/images"

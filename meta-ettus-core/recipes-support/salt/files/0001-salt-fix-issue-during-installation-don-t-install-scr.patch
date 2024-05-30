@@ -1,0 +1,77 @@
+From f171aeba934eae26b7583a8753abc8732ca64e0b Mon Sep 17 00:00:00 2001
+From: Joerg Hofrichter <joerg.hofrichter@ni.com>
+Date: Tue, 9 Apr 2024 16:23:28 +0200
+Subject: [PATCH] salt: fix issue during installation: don't install
+ scripts twice
+
+... otherwise salt:do_install fails with the following error:
+
+FileExistsError: File already exists: (...)/salt/3001.1-r0/image/usr/bin/salt
+
+This change is an adaoptation of the following upstream commit:
+
+From 6b9463836e70e40409dbf653f01aa94ef869dfe7 Mon Sep 17 00:00:00 2001
+From: "Daniel A. Wozniak" <dwozniak@vmware.com>
+Date: Tue, 28 Feb 2023 15:58:17 -0700
+Subject: [PATCH] Remove un-needed scripts property in setup.py
+
+Signed-off-by: Joerg Hofrichter <joerg.hofrichter@ni.com>
+---
+ setup.py | 42 ------------------------------------------
+ 1 file changed, 42 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index ca47612c4f..a2d113b874 100755
+--- a/setup.py
++++ b/setup.py
+@@ -1130,48 +1130,6 @@ class SaltDistribution(distutils.dist.Distribution):
+                     install_requires += _parse_requirements_file(reqfile)
+         return install_requires
+ 
+-    @property
+-    def _property_scripts(self):
+-        # Scripts common to all scenarios
+-        scripts = ["scripts/salt-call", "scripts/salt-run"]
+-        if self.ssh_packaging or PACKAGED_FOR_SALT_SSH:
+-            scripts.append("scripts/salt-ssh")
+-            if IS_WINDOWS_PLATFORM:
+-                return scripts
+-            scripts.extend(["scripts/salt-cloud", "scripts/spm"])
+-            return scripts
+-
+-        if IS_WINDOWS_PLATFORM:
+-            scripts.extend(
+-                [
+-                    "scripts/salt-api",
+-                    "scripts/salt-cp",
+-                    "scripts/salt-key",
+-                    "scripts/salt-minion",
+-                    "scripts/salt-syndic",
+-                    "scripts/spm",
+-                ]
+-            )
+-            return scripts
+-
+-        # *nix, so, we need all scripts
+-        scripts.extend(
+-            [
+-                "scripts/salt",
+-                "scripts/salt-api",
+-                "scripts/salt-cloud",
+-                "scripts/salt-cp",
+-                "scripts/salt-key",
+-                "scripts/salt-master",
+-                "scripts/salt-minion",
+-                "scripts/salt-proxy",
+-                "scripts/salt-ssh",
+-                "scripts/salt-syndic",
+-                "scripts/spm",
+-            ]
+-        )
+-        return scripts
+-
+     @property
+     def _property_entry_points(self):
+         entrypoints = {
+-- 
+2.34.1

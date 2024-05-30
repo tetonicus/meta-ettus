@@ -10,9 +10,8 @@ IMAGE_INSTALL += "\
     glib-2.0 \
     gpsd \
     gpsd-gpsctl \
-    gps-utils-cgps \
-    gps-utils-gps2udp \
-    gps-utils-gpsmon \
+    gps-utils \
+    grpc \
     gsl \
     htop \
     i2c-tools \

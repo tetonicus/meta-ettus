@@ -5,16 +5,15 @@ SECTION = "devel/python"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=8275bea59423b927c5ea127b830bf491"
 
-PV = "20.0.0+git${SRCPV}"
-SRCREV = "588ac49c8103e806eaaf45841f3c538d1acff59e"
+PV = "22.0.0+git${SRCPV}"
+SRCREV = "0e5731955c2a4b5e9fe238edb25bab1797f5ed57"
 SRC_URI = " \
-    git://github.com/ni/nifpga-python;protocol=https \
-    file://0001-nifpga-patch-library-name.patch \
+    git://github.com/ni/nifpga-python;protocol=https;branch=master \
     "
 
 S = "${WORKDIR}/git"
 
-RDEPENDS_${PN} = " \
+RDEPENDS:${PN} = " \
     ${PYTHON_PN}-future \
     "
 

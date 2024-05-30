@@ -12,6 +12,6 @@ python set_uhd_version_as_pkgv() {
                 d.setVar('PKGV', pkgv)
 }
 
-python do_package_prepend() {
+python do_package:prepend() {
     bb.build.exec_func("set_uhd_version_as_pkgv", d)
 }

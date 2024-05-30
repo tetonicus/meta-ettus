@@ -5,10 +5,11 @@ require default-packages.inc
 
 IMAGE_FEATURES += "splash ssh-server-openssh tools-sdk \
                    debug-tweaks \
-                   dev-pkgs \
                   "
 
 EXTRA_IMAGE_FEATURES += "package-management"
+
+IMAGE_INSTALL += "mpmd-dev uhd-dev"
 
 LICENSE = "MIT"
 

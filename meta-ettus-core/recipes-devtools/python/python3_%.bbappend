@@ -1,6 +1,6 @@
-SYSROOT_DIRS_append_class-target = " ${bindir}"
+SYSROOT_DIRS:append:class-target = " ${bindir}"
 
-sysroot_stage_all_append_class-target() {
+sysroot_stage_all:append:class-target() {
   if [ -e "${SYSROOT_DESTDIR}${bindir}" ]; then
       mv ${SYSROOT_DESTDIR}${bindir} ${SYSROOT_DESTDIR}${bindir}-${PN}
       mkdir ${SYSROOT_DESTDIR}${bindir}

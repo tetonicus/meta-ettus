@@ -1,5 +1,5 @@
 DESCRIPTION = "Script to apply an overlay from the commandline"
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 PR="r0"
 PV="0.10"
@@ -15,4 +15,4 @@ do_install() {
 	install -D -m 0755 ${WORKDIR}/overlay ${D}/usr/sbin/overlay
 }
 
-RDEPENDS_${PN} = "bash"
+RDEPENDS:${PN} = "bash"

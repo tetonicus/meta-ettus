@@ -1,0 +1,21 @@
+From 6351d8f3b147f3f13b8ab4a49f10b76e073ee0f9 Mon Sep 17 00:00:00 2001
+From: Kas User <kas@example.com>
+Date: Tue, 30 Jan 2024 15:55:19 +0000
+Subject: [PATCH] Don't install LICENSE to /usr
+
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index c524ed4..afa5925 100755
+--- a/setup.py
++++ b/setup.py
+@@ -27,7 +27,6 @@ setup(
+     description = 'unittest-based test runner with Ant/JUnit like XML reporting.',
+     long_description = long_description,
+     long_description_content_type = 'text/markdown',
+-    data_files = [('', ['LICENSE'])],
+     install_requires = ['lxml'],
+     license = 'BSD',
+     platforms = ['Any'],

@@ -21,4 +21,4 @@ COMPATIBLE_HOST = "aarch64-oe-linux|arm-oe-linux-gnueabi"
 # Remove this to reduce the end image size
 BAD_RECOMMENDATIONS = "udev-hwdb"
 
-ROOTFS_POSTPROCESS_COMMAND_remove = "mender_update_fstab_file;"
+ROOTFS_POSTPROCESS_COMMAND:remove = "mender_update_fstab_file;"
