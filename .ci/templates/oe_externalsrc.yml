@@ -25,9 +25,9 @@ steps:
       if ! grep "$extsrc" ${{ parameters.conf_file }} >/dev/null; then
         echo "$extsrc" >> ${{ parameters.conf_file }}
       fi
-      echo "EXTERNALSRC_pn-${{ parameters.package }} = \"${{ parameters.path }}\"" >> ${{ parameters.conf_file }}
+      echo "EXTERNALSRC:pn-${{ parameters.package }} = \"${{ parameters.path }}\"" >> ${{ parameters.conf_file }}
       if [ ${{ parameters.build_in_src }} = True ]; then
-        echo "EXTERNALSRC_BUILD_pn-${{ parameters.package }} = \"${{ parameters.path }}\"" >> ${{ parameters.conf_file }}
+        echo "EXTERNALSRC_BUILD:pn-${{ parameters.package }} = \"${{ parameters.path }}\"" >> ${{ parameters.conf_file }}
       fi
       cat ${{ parameters.conf_file }}
     displayName: Setup EXTERNALSRC for ${{ parameters.package }}

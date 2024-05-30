@@ -4,14 +4,19 @@ parameters:
     displayName: Perform Mender update instead of flashing
     default: false
     type: boolean
+  - name: test_x4xx
+    displayName: Test x4xx
+    default: true
+    type: boolean
 
 jobs:
 - job: 'test'
   timeoutInMinutes: 120
   strategy:
     matrix:
-      x4xx:
-        machineName: x4xx
+      ${{ if parameters.test_x4xx }}:
+        x4xx:
+          machineName: x4xx
 
   variables:
     ScriptDir: '$(Build.SourcesDirectory)/contrib/test'
@@ -21,7 +26,7 @@ jobs:
 
   pool:
     demands:
-    - openembedded-test -equals x4xx
+    - openembedded-test -equals $(machineName)
 
   steps:
   - checkout: self

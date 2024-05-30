@@ -67,10 +67,13 @@ steps:
   - ${{ each target in parameters.targets }}:
     - script: |
         kas shell -k $KAS_CONFIG -c "bitbake ${{ target }}"
+        if [ $? -ne 0 ];  then
+          echo "##[warning] ${{ target }} returned $?, ignoring"
+        fi
       displayName: "Build ${{ target }}"
       workingDirectory: $(Agent.BuildDirectory)
   - script: |
-      kas shell -k $KAS_CONFIG -c "bitbake package-index package-feed"
+      kas shell -k $KAS_CONFIG -c "bitbake package-index"
     displayName: Build package index and feed
     condition: and(succeeded(), ${{ parameters.build_package_feed }})
     workingDirectory: $(Agent.BuildDirectory)

@@ -1,18 +1,18 @@
 trigger:
   branches:
     include:
-      - zeus-ci
+      - kirkstone
 pr:
   branches:
     include:
-      - zeus-ci
+      - kirkstone
 
 schedules:
   - cron: "19 10 * * *"
     displayName: 'Daily build'
     branches:
       include:
-        - zeus-ci
+        - kirkstone
     always: true
 
 parameters:
@@ -74,15 +74,40 @@ parameters:
     displayName: Build x4xx
     type: boolean
     default: true
+  - name: build_default_targets
+    displayName: Build default targets
+    type: boolean
+    default: true
+  - name: kas_subdirectory
+    displayName: KAS subdirectory
+    type: string
+    default: configs-mender
+    values:
+    - configs-mender
+    - configs-standard
+    - configs-poky
+  - name: image
+    type: string
+    default: deployment-image
+    values:
+    - deployment-image
+    - developer-image
+    - gnuradio-image
+  - name: flash_image
+    type: boolean
+    default: true
 
 resources:
   pipelines:
     - pipeline: usrp-kas-pipeline
       source: 'usrp-kas'
-      branch: zeus-ci
+      branch: kirkstone
     - pipeline: uhddev-fpga-pipeline
       source: 'uhddev fpga pipeline'
       branch: master
+    - pipeline: usrp-filesystem-pipeline
+      source: 'usrp-filesystem'
+      branch: kirkstone
   repositories:
     - repository: linuxdev
       type: github
@@ -93,6 +118,16 @@ resources:
       type: github
       name: EttusResearch/uhddev
       ref: refs/heads/master
+      endpoint: EttusResearch
+    - repository: ettus-rts
+      type: github
+      name: EttusResearch/ettus-rts
+      ref: refs/heads/labgrid
+      endpoint: EttusResearch
+    - repository: labgrid
+      type: github
+      name: joergho/labgrid
+      branch: master-ettus
       endpoint: EttusResearch
 
 variables:
@@ -112,16 +147,21 @@ stages:
         use_custom_mender_prefix: ${{ parameters.use_custom_mender_prefix }}
         custom_mender_prefix: ${{ parameters.custom_mender_prefix }}
         machines:
-          - ${{ if parameters.build_e310_sg1 }}:
-            - e310_sg1
-          - ${{ if parameters.build_e310_sg3 }}:
-            - e310_sg3
-          - ${{ if parameters.build_e320 }}:
-            - e320
-          - ${{ if parameters.build_n3xx }}:
-            - n3xx
-          - ${{ if parameters.build_x4xx }}:
-            - x4xx
+          ${{ if parameters.build_e310_sg1 }}:
+            e310_sg1:
+              machineName: e310_sg1
+          ${{ if parameters.build_e310_sg3 }}:
+            e310_sg3:
+              machineName: e310_sg3
+          ${{ if parameters.build_e320 }}:
+            e320:
+              machineName: e320
+          ${{ if parameters.build_n3xx }}:
+            n3xx:
+              machineName: n3xx
+          ${{ if parameters.build_x4xx }}:
+            x4xx:
+              machineName: x4xx
         auto_conf: $AUTO_CONF
         prebuild_steps:
           - ${{ if or(parameters.ext_linux, parameters.ext_uhd, parameters.ext_fpga) }}:
@@ -167,9 +207,55 @@ stages:
             - script: |
                 ls -l $(Agent.BuildDirectory)/uhddev-fpga-pipeline
               displayName: list fpga images
+        kas_subdirectory: ${{ parameters.kas_subdirectory }}
+        build_default_targets: ${{ parameters.build_default_targets }}
 
-- stage: x4xx_hardware_test
-  displayName: Run x4xx hardware test
+- ${{ if parameters.build_x4xx }}:
+  - stage: x4xx_hardware_test
+    displayName: Run x4xx hardware test
+    dependsOn: build_meta_ettus
+    jobs:
+      - template: templates/job_x4xx_filesystem_test.yml
+        parameters:
+          test_x4xx: ${{ parameters.build_x4xx }}
+- stage: filesystem_embedded_test
+  displayName: Run embedded test
   dependsOn: build_meta_ettus
   jobs:
-    - template: templates/job_x4xx_filesystem_test.yml
+    - template: templates/job_filesystem_embedded_test.yml
+      parameters:
+        machines:
+          ${{ if parameters.build_e310_sg3 }}:
+            e310_sg3:
+              deviceType: e310_sg3
+              ${{ if eq(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-e31x-sg3-mender
+              ${{ if ne(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-e31x-sg3
+          ${{ if parameters.build_e320 }}:
+            e320:
+              deviceType: e320
+              ${{ if eq(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-neon-rev2-mender
+              ${{ if ne(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-neon-rev2
+          ${{ if parameters.build_n3xx }}:
+            n3xx:
+              deviceType: n3xx
+              ${{ if eq(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-sulfur-rev11-mender
+              ${{ if ne(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-sulfur-rev11
+          ${{ if parameters.build_x4xx }}:
+            x4xx:
+              deviceType: x4xx
+              ${{ if eq(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-titanium-rev5-mender
+              ${{ if ne(parameters.kas_subdirectory, 'configs-mender') }}:
+                machine: ni-titanium-rev5
+        image: ${{ parameters.image }}
+        ${{ if eq(parameters.kas_subdirectory, 'configs-mender') }}:
+          image_ext: 'sdimg.bz2'
+        ${{ if ne(parameters.kas_subdirectory, 'configs-mender') }}:
+          image_ext: 'wic.xz'
+        flash_image: ${{ parameters.flash_image }}

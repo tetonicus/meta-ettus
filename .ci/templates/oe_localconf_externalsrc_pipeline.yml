@@ -69,6 +69,6 @@ steps:
         path: $(Agent.BuildDirectory)/${{ parameters.pipeline }}
   - ${{ each pkg in parameters.packages }}:
     - script: |
-        echo "PV_pn-${{ pkg }} = \"${{ parameters.pv_override }}\"" >> ${{ parameters.conf_file }}
+        echo "PV:pn-${{ pkg }} = \"${{ parameters.pv_override }}\"" >> ${{ parameters.conf_file }}
       displayName: Override PV for ${{ pkg }}
       condition: and(succeeded(), ${{ not(eq(parameters.pv_override, '')) }})

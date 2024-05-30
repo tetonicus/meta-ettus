@@ -1,0 +1,152 @@
+parameters:
+  - name: machines
+    type: object
+    default: {}
+  - name: image
+    type: string
+    default: deployment-image
+  - name: flash_image
+    type: boolean
+    default: true
+  - name: image_ext
+    type: string
+    default: wic.xz
+  - name: tests
+    type: object
+    default:
+    - test_power_on_off
+    - test_linux
+    - test_uhd
+    - test_mender
+
+jobs:
+- job: 'test'
+  timeoutInMinutes: 120
+  strategy:
+    matrix: ${{ parameters.machines }}
+
+  variables:
+    - group: meta-ettus-vars
+    - name: labgrid-venv
+      value: '$(Pipeline.Workspace)/labgrid-venv'
+    - name: labgridClientConfigDir
+      value: '$(Build.SourcesDirectory)/ettus-rts/labgrid/client-configs'
+    - name: image
+      value: ${{ parameters.image }}
+    - name: image-ext
+      value: ${{ parameters.image_ext }}
+    - name: build_result
+      value: $[ stageDependencies.build_meta_ettus.build.result ]
+    - name: runTests
+      value: true
+
+  pool:
+    name: de-dre-lab
+    demands:
+    - Agent.OS -equals Linux
+    - embedded-test -equals 1
+
+  steps:
+  - checkout: ettus-rts
+  - checkout: labgrid
+  - download: current
+    artifact: $(deviceType)-images
+    displayName: download artifacts from current
+    condition: and(succeeded(), ne(variables.build_result, 'Skipped'), ${{ parameters.flash_image }})
+  - script: |
+      echo "###vso[task.setVariable variable=ImagePath]$(Agent.BuildDirectory)/$(deviceType)-images/$(image)-$(machine).$(image-ext)"
+      echo "###vso[task.setVariable variable=MenderPath]$(Agent.BuildDirectory)/$(deviceType)-images/$(image)-$(machine).mender"
+    displayName: set image path (from current)
+    condition: and(succeeded(), ne(variables.build_result, 'Skipped'), ${{ parameters.flash_image }})
+  - download: usrp-filesystem-pipeline
+    artifact: $(deviceType)-images
+    displayName: download artifacts from last run
+    condition: and(succeeded(), eq(variables.build_result, 'Skipped'), ${{ parameters.flash_image }})
+  - script: |
+      echo "###vso[task.setVariable variable=ImagePath]$(Agent.BuildDirectory)/usrp-filesystem-pipeline/$(deviceType)-images/$(image)-$(machine).$(image-ext)"
+      echo "###vso[task.setVariable variable=MenderPath]$(Agent.BuildDirectory)/usrp-filesystem-pipeline/$(deviceType)-images/$(image)-$(machine).mender"
+    displayName: set image path (from last run)
+    condition: and(succeeded(), eq(variables.build_result, 'Skipped'), ${{ parameters.flash_image }})
+  - script: |
+      for PKG in snmp libsnmp??; do
+        apt-get download $PKG
+        dpkg-deb -x $PKG*.deb .
+      done
+      PATH=$PATH:$PWD/usr/bin
+      LD_LIBRARY_PATH=$PWD/usr/lib/x86_64-linux-gnu
+      echo "###vso[task.setVariable variable=PATH]$PATH"
+      echo "###vso[task.setVariable variable=LD_LIBRARY_PATH]$LD_LIBRARY_PATH"
+    displayName: 'locally install snmp'
+    condition: False
+  - script: |
+      python3 -m venv $(labgrid-venv)
+      source $(labgrid-venv)/bin/activate
+      pip install --upgrade pip
+      pip install $(Build.SourcesDirectory)/labgrid
+    displayName: 'Setup labgrid-venv'
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      eval `labgrid-client reserve --shell type=$(deviceType) embedded-test=true`
+      echo "###vso[task.setVariable variable=LG_TOKEN]$LG_TOKEN"
+      labgrid-client wait
+      labgrid-client -p + acquire
+    displayName: 'make reservation; acquire place'
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      LG_PLACE=$(labgrid-client -p + show | head -n 1 | sed "s|^Place '\(\S*\)':$|\1|")
+      echo "LG_PLACE=$LG_PLACE"
+      echo "###vso[task.setVariable variable=LG_PLACE]$LG_PLACE"
+    displayName: 'set LG_PLACE variable'
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      typeArgs=$(labgrid-client -p + get-tags --argument-style type product)
+      echo "typeArgs=$typeArgs"
+      echo "###vso[task.setVariable variable=typeArgs]$typeArgs"
+    displayName: 'set typeArgs variable'
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      labgrid-client -p + show
+    displayName: 'print place resources'
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      labgrid-client -c $(labgridClientConfigDir)/$(LG_PLACE)-netboot.yaml -s shell -vv write-image --driver ShellStorageDriver --mode bmaptool $(ImagePath)
+      rc=$?
+      if [ $rc != 0 ]; then
+        echo "###vso[task.setVariable variable=runTests]false"
+      fi
+      exit $rc
+    displayName: flash image
+    condition: and(succeeded(), ${{ parameters.flash_image }})
+
+  - ${{ each test in parameters.tests }}:
+    - script: |
+        source $(labgrid-venv)/bin/activate
+        export PYTEST_ADDOPTS="--color=yes"
+        if [ "${{ test }}" = "test_mender" ]; then
+          additional_args="--mender=$(MenderPath)"
+        else
+          additional_args=""
+        fi
+        pytest --junitxml=$(Common.TestResultsDirectory)/${{ test }}.xml --lg-env $(labgridClientConfigDir)/$(LG_PLACE).yaml $(Build.SourcesDirectory)/ettus-rts/labgrid/tests/${{ test }}.py -vv $(typeArgs) ${additional_args}
+      displayName: run ${{ test }}
+      condition: and(eq(variables.runTests, 'true'), not(canceled()))
+
+  - script: |
+      source $(labgrid-venv)/bin/activate
+      labgrid-client -p + release
+      labgrid-client cancel-reservation
+    displayName: 'release place; cancel reservation'
+    condition: always()
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/*.xml'
+      testRunTitle: 'Embedded Tests $(System.JobName)'
+      searchFolder: '$(Common.TestResultsDirectory)'
+    condition: eq(variables.runTests, 'true')

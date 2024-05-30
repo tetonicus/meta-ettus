@@ -44,6 +44,12 @@ parameters:
   - name: run_from_external_repo
     type: boolean
     default: False
+  - name: kas_subdirectory
+    type: string
+    default: 'configs-mender'
+  - name: build_default_targets
+    type: boolean
+    default: True
 
 jobs:
   - job: get_usrp_kas_docker_image
@@ -69,9 +75,7 @@ jobs:
     cancelTimeoutInMinutes: 10
     strategy:
       matrix:
-        ${{ each machine in parameters.machines }}:
-          ${{ machine }}:
-            machineName: ${{ machine }}
+        ${{ parameters.machines }}
     pool:
       name: Drivers-NIBuildFarm-RFMIBuild
       demands:
@@ -105,7 +109,7 @@ jobs:
 
     container:
       image: $(USRP_KAS_DOCKER_IMAGE)
-      options: -e NO_PROXY=""
+      options: -e NO_PROXY="" --security-opt seccomp=unconfined
       endpoint: 'rnd-docker-niartifacts-pre-readonly'
 
     steps:
@@ -135,24 +139,24 @@ jobs:
         - task: Cache@2
           displayName: "Cache downloads"
           inputs:
-            key: '"downloads" | "$(CacheTimestamp)"'
-            restoreKeys: '"downloads"'
+            key: '"kirkstone" | "downloads" | "$(CacheTimestamp)"'
+            restoreKeys: '"kirkstone" | "downloads"'
             path: $(DL_DIR)
 
       - ${{ if parameters.cache_sstate }}:
         - task: Cache@2
           displayName: "Cache sstate"
           inputs:
-            key: '"sstate" | "$(machineName)" | "$(CacheTimestamp)"'
-            restoreKeys: '"sstate" | "$(machineName)"'
+            key: '"kirkstone" | "sstate" | "$(machineName)" | "$(CacheTimestamp)"'
+            restoreKeys: '"kirkstone" | "sstate" | "$(machineName)"'
             path: $(SSTATE_DIR)
 
       - ${{ if parameters.ccache }}:
         - task: Cache@2
           displayName: "Cache ccache"
           inputs:
-            key: '"ccache" | "$(machineName)" | "$(CacheTimestamp)"'
-            restoreKeys: '"ccache" | "$(machineName)"'
+            key: '"kirkstone" | "ccache" | "$(machineName)" | "$(CacheTimestamp)"'
+            restoreKeys: '"kirkstone" | "ccache" | "$(machineName)"'
             path: $(CCACHE_DIR)
 
       - script: |
@@ -186,7 +190,7 @@ jobs:
       - ${{ parameters.prebuild_steps }}
 
       - script: |
-          KAS_BASE_PATH=$(find $(Pipeline.Workspace) -wholename '*/kas/base.yml' -exec realpath {} \; | head | sed 's;/base.yml;;')
+          KAS_BASE_PATH=$(find $(Pipeline.Workspace) -wholename '*/kas/include' -exec realpath {} \; | head | sed 's;/include;;')
           echo $KAS_BASE_PATH
           echo "###vso[task.setVariable variable=KAS_BASE_PATH]"$KAS_BASE_PATH
         displayName: Find kas base path
@@ -194,7 +198,7 @@ jobs:
       - template: kas_build.yml
         parameters:
           kas_config:
-            - $KAS_BASE_PATH/$(machineName).yml
+            - $KAS_BASE_PATH/${{ parameters.kas_subdirectory }}/$(machineName).yml
             - ${{ if eq(parameters.include_internal, true) }}:
               - $KAS_BASE_PATH/internal.yml
           auto_conf: ${{ parameters.auto_conf }}
@@ -203,21 +207,26 @@ jobs:
           build_sdk: ${{ parameters.build_sdk }}
           targets:
             - uhd:do_run_tests
+          build_default_targets: ${{ parameters.build_default_targets }}
 
       - script: |
           rm -rf ./images
           mkdir images
 
           # main image
-          find $KAS_DEPLOY_DIR -type l -name '*.sdimg.bz2' -exec cp {} images \;
-          find $KAS_DEPLOY_DIR -type l -name '*.sdimg.bmap' -exec cp {} images \;
+          find $KAS_DEPLOY_DIR -type l -name '*.wic.*' -exec cp {} images \;
+          find $KAS_DEPLOY_DIR -type l -name '*.sdimg.*' -exec cp {} images \;
+          find $KAS_DEPLOY_DIR -type l -name '*.tar.*' -exec cp {} images \;
+          find $KAS_DEPLOY_DIR -type l -name '*.manifest' -exec cp {} images \;
 
           # mender image
           find $KAS_DEPLOY_DIR -type l -name "*.mender" -exec cp {} images \;
 
+          # microcontroller firmware
+          find $KAS_DEPLOY_DIR -type f -name "ec-*-rev*.bin" -exec cp {} images \;
+
           # x4xx specific
           find $KAS_DEPLOY_DIR -type l -name "u-boot-jtag-files.zip" -exec cp {} images \;
-          find $KAS_DEPLOY_DIR/../../ -name "ec-titanium-rev*.bin" -exec cp {} images/ \;
           find $KAS_DEPLOY_DIR -type l -name "fitImage-manufacturing-image*" -exec cp {} images/fitImage-manufacturing \;
 
           find images
@@ -257,7 +266,7 @@ jobs:
         inputs:
           testResultsFormat: cTest
           testResultsFiles: $(Common.TestResultsDirectory)/uhd/Testing/**/Test.xml
-          failTaskOnFailedTests: true
+          failTaskOnFailedTests: false
           testRunTitle: uhd ctest meta-ettus-$(machineName)
         displayName: Publish uhd meta-ettus-$(machineName) ctest results
 

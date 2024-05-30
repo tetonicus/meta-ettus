@@ -8,10 +8,14 @@ local_conf_header:
   licenses: |
     COPY_LIC_MANIFEST = "1"
     COPY_LIC_DIRS = "1"
+  # externalsrc: |
+  #   INHERIT += "externalsrc"
+  #   EXTERNALSRC:pn-uhd = "/work/uhd/host"
+  #   EXTERNALSRC:pn-mpmd = "/work/uhd/mpm"
+  #   EXTERNALSRC:pn-uhd-fpga-images = "/work/fpga"
 repos:
   meta-ettus:
     layers:
-      meta-ettus-backports:
       meta-ettus-bsp:
       meta-ettus-core:
       meta-alchemy:

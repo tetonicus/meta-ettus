@@ -3,5 +3,4 @@ header:
 repos:
   meta-ettus:
     layers:
-      meta-ettus-backports:
       meta-ettus-bsp:
