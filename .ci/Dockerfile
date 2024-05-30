@@ -1,4 +1,5 @@
-FROM ghcr.io/siemens/kas/kas:2.4
+FROM ghcr.io/siemens/kas/kas:4.0
+USER root
 RUN apt-get update && \
 	apt-get install --no-install-recommends -y ccache zip && \
 	apt-get clean && \
