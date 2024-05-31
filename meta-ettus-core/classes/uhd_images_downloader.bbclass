@@ -12,6 +12,10 @@ addtask do_download_uhd_images after do_unpack do_prepare_recipe_sysroot before 
 do_download_uhd_images() {
     if [ -n "${EXTERNALSRC}" ]; then
         bbwarn "building from external source - skip downloading UHD FPGA images"
+        if [ ! -e "${S}/inventory.json" ]; then
+            bbwarn "creating empty inventory.json file"
+            echo "{}" > ${S}/inventory.json
+        fi
     else
         DOWNLOADER="python3 ${WORKDIR}/recipe-sysroot/usr/lib/uhd/utils/uhd_images_downloader.py"
         DOWNLOADER_OPTS="-i ${UHD_IMAGES_DOWNLOAD_DIR}"
