@@ -27,7 +27,7 @@ UHD_IMAGES_INSTALL_PATH ?= "/usr/share/uhd/images"
 # This variable needs to be appended with a machine specific overwrite
 UHD_FPGA_IMAGES_IN_FIRMWARE ??= ""
 
-do_compile_append() {
+do_compile() {
     # the files are provided by uhd-fpga-images
     for IMAGE in ${UHD_FPGA_IMAGES_IN_FIRMWARE}; do
         if [ -f ${UHD_IMAGES_DOWNLOAD_DIR}/$IMAGE.bin ]; then
@@ -39,7 +39,7 @@ do_compile_append() {
     done
 }
 
-do_install_append() {
+do_install() {
     for IMAGE in ${UHD_FPGA_IMAGES_IN_FIRMWARE}; do
         mkdir -p  ${D}/lib/firmware/
         install -m 0644 ${WORKDIR}/$IMAGE.bin ${D}/lib/firmware/
