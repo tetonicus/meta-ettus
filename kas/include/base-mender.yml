@@ -75,6 +75,9 @@ repos:
       patch0:
         repo: meta-ettus
         path: kas/patches/meta-mender/0001-meta-mender-core-u-boot-adopt-patch-0003-to-kirkston.patch
+      patch1:
+        repo: meta-ettus
+        path: kas/patches/meta-mender/0002-systemd-don-t-set-SOURCE_DATE_EPOCH-to-0.patch
   meta-security:
     url: git://git.yoctoproject.org/meta-security
     commit: 1a3e42cedbd94ca73be45800d0e902fec35d0f0f
