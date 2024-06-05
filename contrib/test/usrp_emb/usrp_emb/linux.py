@@ -75,7 +75,7 @@ class Linux:
     def mender_install(self, url):
         old_timeout = self.uart.timeout
         self.uart.timeout = 600
-        self.uart.sendline(f"mender -install {url}")
+        self.uart.sendline(f"mender install {url}")
         self.uart.expect("Performing remote update from:")
         self.uart.expect("Opening device \"([^\"]+)\" for writing")
         target =  self.uart.match.group(1).decode('ascii')
@@ -86,7 +86,7 @@ class Linux:
         return target
 
     def mender_commit(self):
-        self.uart.sendline("mender -commit")
+        self.uart.sendline("mender commit")
         self.uart.expect("Committing update")
 
     def mount(self, dev, mountpoint):
