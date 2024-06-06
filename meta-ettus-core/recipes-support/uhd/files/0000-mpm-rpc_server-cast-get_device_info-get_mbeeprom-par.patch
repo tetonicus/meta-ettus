@@ -1,8 +1,8 @@
 From 11091cb4f715e90571e43eff8389ba764dcd1a73 Mon Sep 17 00:00:00 2001
 From: Joerg Hofrichter <joerg.hofrichter@ni.com>
 Date: Thu, 2 May 2024 08:54:50 +0200
-Subject: [PATCH 1/2] mpm: rpc_server: cast get_device_info/get_mbeeprom params
- to n/a
+Subject: [PATCH] mpm: rpc_server: cast get_device_info/get_mbeeprom params to
+ n/a
 
 ensure the map contains only string values otherwise it cannot be
 casted to std::map<string, string> in C++

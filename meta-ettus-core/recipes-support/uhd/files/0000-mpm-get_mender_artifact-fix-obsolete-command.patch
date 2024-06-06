@@ -1,7 +1,7 @@
 From f3d57180bf90cff8cefe16d499497e2df2384fda Mon Sep 17 00:00:00 2001
 From: Joerg Hofrichter <joerg.hofrichter@ni.com>
 Date: Thu, 2 May 2024 13:47:30 +0200
-Subject: [PATCH 2/2] mpm: get_mender_artifact: fix obsolete command
+Subject: [PATCH] mpm: get_mender_artifact: fix obsolete command
 
 "mender -show-artifact" is deprecated since mender version 3.0.0
 use "mender show-artifact" instead

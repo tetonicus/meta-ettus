@@ -1,4 +1,4 @@
-From c433e550d5d4392fff8eb7d4e708bf770220347c Mon Sep 17 00:00:00 2001
+From 9cbe1e274ad46234e36a9913a2746f1de43d4d29 Mon Sep 17 00:00:00 2001
 From: Joerg Hofrichter <joerg.hofrichter@ni.com>
 Date: Thu, 14 Mar 2024 14:26:45 +0100
 Subject: [PATCH] mpm: tdc: fix compatibility with Python >= 3.9.0
