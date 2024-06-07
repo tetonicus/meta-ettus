@@ -2,8 +2,7 @@ header:
   version: 10
 distro: Alchemy
 target:
-  - flashing-image
-  - deployment-image
+  - gnuradio-image
 local_conf_header:
   licenses: |
     COPY_LIC_MANIFEST = "1"
@@ -67,10 +66,5 @@ repos:
     url: https://github.com/meta-qt5/meta-qt5
     commit: fe0bf7f0e5408aac6cc89ff3b19b1b1941df4f64
   meta-sdr:
-    # url: https://github.com/EttusResearch/meta-sdr
     url: https://github.com/balister/meta-sdr
-    commit: 382a4c6534832ad47fab417305ffb0f38bf88a7d
-    # patches:
-    #   patch0:
-    #     repo: meta-ettus
-    #     path: kas/patches/meta-sdr/0001-gr-ettus-recipe-is-not-needed-for-UHD-4.x-and-Gnurad.patch
+    commit: 0114d47e324d68a2511828c5509408968aba2646
