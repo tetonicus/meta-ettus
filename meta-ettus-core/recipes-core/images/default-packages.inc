@@ -54,4 +54,5 @@ IMAGE_INSTALL += "\
 PACKAGE_EXCLUDE = " \
     linux-firmware-dev \
     nfs-utils-dev \
+    nfs-utils-mount \
     "
