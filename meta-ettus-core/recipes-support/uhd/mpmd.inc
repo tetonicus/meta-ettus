@@ -102,3 +102,11 @@ do_install:append() {
         done
     fi
 }
+
+do_libusrp_periphs_sanity() {
+    UNDEFINED=$(nm -D -u "${D}${libdir}/libusrp-periphs.so" | grep uhd) || true
+    if [ -n "$UNDEFINED" ]; then
+        bbfatal "undefined UHD symbols in libusrp-periphs.so: $UNDEFINED"
+    fi
+}
+addtask do_libusrp_periphs_sanity after do_install before do_package
