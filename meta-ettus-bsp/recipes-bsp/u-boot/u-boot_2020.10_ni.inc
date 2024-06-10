@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:prepend:ni-titanium := "${THISDIR}/files/ni-titanium:"
 
-SRC_URI:prepend:ni-titanium += " \
+SRC_URI:prepend:ni-titanium = " \
                   file://boot_u-boot.tcl \
                   file://boot_u-boot \
                   file://0001-usb-dwc3-Increase-the-timeout-for-generic-commands.patch \
@@ -13,7 +13,7 @@ SRC_URI:prepend:ni-titanium += " \
                   file://0008-board-ni-add-support-for-X440.patch \
                   "
 
-DEPENDS:append:ni-titanium += "zip-native"
+DEPENDS:append:ni-titanium = " zip-native"
 
 FILES:${PN}:ni-titanium="/uboot /etc"
 
@@ -74,7 +74,7 @@ do_deploy:append:ni-titanium() {
 
 # workarounds to remove the zynqmp-overrides to u-boot because the platform init
 # and the PMU firmware are already taken care of by the ni-titanium overrides
-DEPENDS:remove:ni-titanium += "virtual/xilinx-platform-init"
+DEPENDS:remove:ni-titanium = " virtual/xilinx-platform-init"
 
 do_zynq_platform_init:ni-titanium() {
 }

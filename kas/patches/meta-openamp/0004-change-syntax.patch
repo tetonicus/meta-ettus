@@ -37,8 +37,8 @@ index b6a8213..1cda19c 100644
  
 -#IMAGE_INSTALL_append_zynqmp += " kernel-module-zynqmp-r5-remoteproc"
 -#IMAGE_INSTALL_append_zynq += " kernel-module-zynq-remoteproc"
-+#IMAGE_INSTALL:append:zynqmp += " kernel-module-zynqmp-r5-remoteproc"
-+#IMAGE_INSTALL:append:zynq += " kernel-module-zynq-remoteproc"
++#IMAGE_INSTALL:append:zynqmp = " kernel-module-zynqmp-r5-remoteproc"
++#IMAGE_INSTALL:append:zynq = " kernel-module-zynq-remoteproc"
  
  IMAGE_LINGUAS=""
 diff --git a/recipes-openamp/libmetal/libmetal.inc b/recipes-openamp/libmetal/libmetal.inc
@@ -59,7 +59,7 @@ index 1231c72..1f86a99 100644
  ALLOW_EMPTY_${PN}-demos = "1"
  
 -PACKAGES_append += "${PN}-demos"
-+PACKAGES:append += "${PN}-demos"
++PACKAGES:append = " ${PN}-demos"
  
 -FILES_${PN} = " \
 +FILES:${PN} = " \
@@ -119,7 +119,7 @@ index f79ba6c..14d1af0 100644
  
  ALLOW_EMPTY_${PN}-demos = "1"
 -PACKAGES_append += "${PN}-demos"
-+PACKAGES:append += "${PN}-demos"
++PACKAGES:append = " ${PN}-demos"
  
 -FILES_${PN} = " \
 +FILES:${PN} = " \
