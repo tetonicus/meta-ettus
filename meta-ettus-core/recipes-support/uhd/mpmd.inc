@@ -81,6 +81,8 @@ FILES:${PN}-dbg += "${bindir}/mpm_debug.py"
 FILES:${PN}-tools += " ${bindir}/eeprom-*"
 FILES:${PN}-tests = "${libdir}/usrp_mpm/tests"
 
+PACKAGE_DEBUG_SPLIT_STYLE = "debug-without-src"
+
 do_install:append() {
     mkdir -p ${D}${libdir}/usrp_mpm/tests/
     install -m 0644 ${S}/python/tests/*.py ${D}${libdir}/usrp_mpm/tests/
