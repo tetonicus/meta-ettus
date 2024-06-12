@@ -6,10 +6,6 @@ MENDER_FEATURES_DISABLE:append:ni-titanium-mender = " mender-grub mender-image-u
 
 IMAGE_FSTYPES:remove:ni-titanium-mender = "wic wic.bmap"
 
-PREFERRED_VERSION_pn-mender-client = "2.%"
-PREFERRED_VERSION_pn-mender-artifact = "3.%"
-PREFERRED_VERSION_pn-mender-artifact-native = "3.%"
-
 IMAGE_INSTALL:append = " mender-client-migrate-configuration"
 PACKAGECONFIG:remove = "split-mender-config"
 MENDER_PERSISTENT_CONFIGURATION_VARS = "RootfsPartA RootfsPartB"

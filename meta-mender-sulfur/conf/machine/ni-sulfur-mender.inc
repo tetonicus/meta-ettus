@@ -14,10 +14,6 @@ MENDER_RESERVED_SPACE_BOOTLOADER_DATA="16777216"
 MENDER_FEATURES_ENABLE:append:ni-sulfur-mender = " mender-uboot mender-image mender-systemd mender-image-sd"
 MENDER_FEATURES_DISABLE:append:ni-sulfur-mender = " mender-grub mender-image-uefi"
 
-PREFERRED_VERSION_pn-mender-client = "2.%"
-PREFERRED_VERSION_pn-mender-artifact = "3.%"
-PREFERRED_VERSION_pn-mender-artifact-native = "3.%"
-
 IMAGE_INSTALL:append = " mender-client-migrate-configuration"
 PACKAGECONFIG:remove = "split-mender-config"
 MENDER_PERSISTENT_CONFIGURATION_VARS = "RootfsPartA RootfsPartB"
