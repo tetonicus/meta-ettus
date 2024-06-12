@@ -51,8 +51,7 @@ IMAGE_INSTALL += "\
 # nfs-utils-dev which pulls in nfs-utils which pulls in nfs-utils-client
 # which causes a systemd service (proc-fs-nfsd.mount) to fail...
 
-PACKAGE_EXCLUDE = " \
+PACKAGE_EXCLUDE_COMPLEMENTARY = " \
     linux-firmware-dev \
     nfs-utils-dev \
-    nfs-utils-mount \
     "
