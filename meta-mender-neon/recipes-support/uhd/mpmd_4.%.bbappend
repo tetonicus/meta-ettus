@@ -1,4 +1,15 @@
+inherit mender-state-scripts
+
+SRC_URI:append:ni-neon-mender = " \
+    file://copy-int0-interface.sh \
+    "
 FILES:${PN}:append:ni-neon-mender = " /data/network/*"
+
+do_compile:append:ni-neon-mender() {
+    # install copy-int0-interface script to update /data/int0.network
+    mkdir -p ${MENDER_STATE_SCRIPTS_DIR}
+    cp ${WORKDIR}/copy-int0-interface.sh ${MENDER_STATE_SCRIPTS_DIR}/ArtifactCommit_Enter_10_copy-int0-interface
+}
 
 do_install:append:ni-neon-mender() {
     install -d ${D}/data/network/

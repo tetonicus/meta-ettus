@@ -1,4 +1,15 @@
+inherit mender-state-scripts
+
+SRC_URI:append:ni-sulfur-mender = " \
+    file://copy-int0-interface.sh \
+    "
 FILES:${PN}:append:ni-sulfur-mender = " /data/network/*"
+
+do_compile:append:ni-sulfur-mender() {
+    # install copy-int0-interface script to update /data/int0.network
+    mkdir -p ${MENDER_STATE_SCRIPTS_DIR}
+    cp ${WORKDIR}/copy-int0-interface.sh ${MENDER_STATE_SCRIPTS_DIR}/ArtifactCommit_Enter_10_copy-int0-interface
+}
 
 do_install:append:ni-sulfur-mender() {
     install -d ${D}/data/network/
