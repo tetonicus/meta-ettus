@@ -19,7 +19,7 @@ if [[ $# -eq 0 ]]; then
 fi
 
 _requested_device=$1
-_kas_config=$META_ETTUS_DIR/kas/$_requested_device.yml
+_kas_config=$META_ETTUS_DIR/kas/configs-mender/$_requested_device.yml
 
 _artifact_name="git"
 if [[ $# -ge 2 ]]; then
