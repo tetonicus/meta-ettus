@@ -5,6 +5,9 @@ header:
 machine: ni-neon-rev2-mender
 env:
   MENDER_ARTIFACT_NAME: git_e320
+local_conf_header:
+  "SDK deploy directory": |
+    SDK_DEPLOY:append = "/e320"
 repos:
   meta-ettus:
     layers:

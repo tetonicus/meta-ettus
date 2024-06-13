@@ -5,6 +5,9 @@ header:
 machine: ni-sulfur-rev11-mender
 env:
   MENDER_ARTIFACT_NAME: git_n3xx
+local_conf_header:
+  "SDK deploy directory": |
+    SDK_DEPLOY:append = "/n3xx"
 repos:
   meta-ettus:
     layers:

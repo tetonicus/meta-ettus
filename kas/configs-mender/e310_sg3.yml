@@ -5,6 +5,9 @@ header:
 machine: ni-e31x-sg3-mender
 env:
   MENDER_ARTIFACT_NAME: git_e310_sg3
+local_conf_header:
+  "SDK deploy directory": |
+    SDK_DEPLOY:append = "/e310_sg3"
 repos:
   meta-ettus:
     layers:

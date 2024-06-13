@@ -9,13 +9,9 @@ target:
   # - mc:zynqmp-pmu:pmu-firmware
   - mc:ni-titanium-ec:chromium-ec
   - mc:ni-titanium:gnuradio-image
-# local_conf_header:
-#   remove_uninative:
-#     INHERIT_remove = "uninative"
-#   remove_x11:
-#     DISTRO_FEATURES_remove = "x11"
-#   remove_opengl:
-#     DISTRO_FEATURES_remove = "opengl"
+local_conf_header:
+  "SDK deploy directory": |
+    SDK_DEPLOY:append = "/x4xx"
 repos:
   meta-ettus:
     layers:
