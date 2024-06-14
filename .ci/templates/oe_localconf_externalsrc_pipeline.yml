@@ -48,9 +48,6 @@ steps:
         patterns: ${{ parameters.patterns }}
       ${{ else }}:
         displayName: Download ${{ artifact }}
-  - download: ${{ parameters.pipeline }}
-    displayName: Download artifacts from ${{ parameters.pipeline }}
-    condition: and(succeeded(), ${{ eq(length(parameters.artifacts), 0) }})
   - script: |
       echo
       echo before
