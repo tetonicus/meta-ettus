@@ -195,6 +195,15 @@ jobs:
           echo "###vso[task.setVariable variable=KAS_BASE_PATH]"$KAS_BASE_PATH
         displayName: Find kas base path
 
+      - script: |
+          git -C $KAS_BASE_PATH/.. log -1
+          REPRODUCIBLE_TIMESTAMP_ROOTFS=$(git -C $KAS_BASE_PATH/.. log -1 --pretty=%ct 2>/dev/null)
+          echo REPRODUCIBLE_TIMESTAMP_ROOTFS=$REPRODUCIBLE_TIMESTAMP_ROOTFS
+          cat <<EOF >>$(Agent.BuildDirectory)/site.conf
+          REPRODUCIBLE_TIMESTAMP_ROOTFS = "$REPRODUCIBLE_TIMESTAMP_ROOTFS"
+          EOF
+        displayName: "Set reproducible timestamp for rootfs"
+
       - template: kas_build.yml
         parameters:
           kas_config:
