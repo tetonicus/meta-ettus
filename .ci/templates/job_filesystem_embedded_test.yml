@@ -4,13 +4,13 @@ parameters:
     default: {}
   - name: image
     type: string
-    default: deployment-image
+    default: gnuradio-image
   - name: flash_image
     type: boolean
     default: true
   - name: image_ext
     type: string
-    default: wic.xz
+    default: sdimg.bz2
   - name: tests
     type: object
     default:
@@ -127,6 +127,7 @@ jobs:
   - ${{ each test in parameters.tests }}:
     - script: |
         source $(labgrid-venv)/bin/activate
+        pip install -r $(Build.SourcesDirectory)/ettus-rts/labgrid/tests/requirements.txt
         export PYTEST_ADDOPTS="--color=yes"
         if [ "${{ test }}" = "test_mender" ]; then
           additional_args="--mender=$(MenderPath)"
