@@ -18,6 +18,7 @@ parameters:
     - test_linux
     - test_uhd
     - test_mender
+    - test_salt
 
 jobs:
 - job: 'test'
