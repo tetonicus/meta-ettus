@@ -20,4 +20,9 @@ pkg_postinst_ontarget:${PN}() {
             install -D $FILENAME.sample $(readlink $FILENAME)
         fi
     done
+    # force overwriting int0.network file
+    for FILENAME in ${base_libdir}/systemd/network/*int0.network; do
+        echo "Overwriting $FILENAME file"
+        install -D -v $FILENAME.sample $(readlink $FILENAME)
+    done
 }
