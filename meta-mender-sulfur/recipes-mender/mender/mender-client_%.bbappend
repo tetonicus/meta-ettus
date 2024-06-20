@@ -5,6 +5,8 @@ SRC_URI:append:ni-sulfur-mender = " \
     file://mender-inventory-serial \
 "
 
+PACKAGE_ARCH:ni-sulfur-mender = "${MACHINE_ARCH}"
+
 SYSTEMD_AUTO_ENABLE:ni-sulfur-mender = "disable"
 
 do_install:append:ni-sulfur-mender() {

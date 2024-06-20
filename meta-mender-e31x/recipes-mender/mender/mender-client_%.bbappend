@@ -5,6 +5,8 @@ SRC_URI:append:ni-e31x-mender = " \
     file://mender-inventory-serial \
 "
 
+PACKAGE_ARCH:ni-e31x-mender = "${MACHINE_ARCH}"
+
 SYSTEMD_AUTO_ENABLE:ni-e31x-mender = "disable"
 
 do_install:append:ni-e31x-mender() {

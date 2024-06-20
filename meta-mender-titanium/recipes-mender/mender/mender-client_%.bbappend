@@ -5,6 +5,8 @@ SRC_URI:append:ni-titanium-mender = " \
     file://mender-inventory-serial \
 "
 
+PACKAGE_ARCH:ni-titanium-mender = "${MACHINE_ARCH}"
+
 SYSTEMD_AUTO_ENABLE:ni-titanium-mender = "disable"
 
 do_install:append:ni-titanium-mender() {

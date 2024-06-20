@@ -5,6 +5,8 @@ SRC_URI:append:ni-neon-mender = " \
     file://mender-inventory-serial \
 "
 
+PACKAGE_ARCH:ni-neon-mender = "${MACHINE_ARCH}"
+
 SYSTEMD_AUTO_ENABLE:ni-neon-mender = "disable"
 
 do_install:append:ni-neon-mender() {
