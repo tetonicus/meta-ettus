@@ -5,7 +5,7 @@ SRC_URI:append:ni-neon-mender = " \
     file://mender-inventory-serial \
 "
 
-SYSTEMD_AUTO_ENABLE ?= "disable"
+SYSTEMD_AUTO_ENABLE:ni-neon-mender = "disable"
 
 do_install:append:ni-neon-mender() {
 	install -m 0755 ${WORKDIR}/mender-device-identity ${D}/${datadir}/mender/identity/mender-device-identity
