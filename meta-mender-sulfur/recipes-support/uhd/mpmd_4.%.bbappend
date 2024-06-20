@@ -25,4 +25,5 @@ pkg_postinst_ontarget:${PN}() {
         echo "Overwriting $FILENAME file"
         install -D -v $FILENAME.sample $(readlink $FILENAME)
     done
+    if [ -x /bin/systemctl ]; then /bin/systemctl reload --no-block systemd-networkd; fi
 }
