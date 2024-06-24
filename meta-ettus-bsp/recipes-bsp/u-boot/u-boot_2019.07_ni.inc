@@ -10,6 +10,7 @@ SRC_URI:prepend:ni-e31x = " \
     "
 
 SRC_URI:prepend:ni-neon-rev1 = " \
+    file://0001-misc-cros_ec-Add-trivial-support-for-software-sync.patch \
     file://0001-ni-zynq-Add-support-for-NI-Project-Neon-Rev1-SDR.patch \
     file://0002-ni-zynq-Added-network-commands-dhcp-tftpboot.patch \
     file://0003-ni-zynq-set-bootdelay-to-3-seconds.patch \
@@ -17,6 +18,7 @@ SRC_URI:prepend:ni-neon-rev1 = " \
 "
 
 SRC_URI:prepend:ni-neon-rev2 = " \
+    file://0001-misc-cros_ec-Add-trivial-support-for-software-sync.patch \
     file://0001-ni-zynq-Add-support-for-NI-Project-Neon-Rev2-SDR.patch \
     file://0002-ni-zynq-Added-network-commands-dhcp-tftpboot.patch \
     file://0003-ni-zynq-set-bootdelay-to-3-seconds.patch \
@@ -24,6 +26,7 @@ SRC_URI:prepend:ni-neon-rev2 = " \
 "
 
 SRC_URI:prepend:ni-sulfur = " \
+    file://0001-misc-cros_ec-Add-trivial-support-for-software-sync.patch \
     file://0001-ni-zynq-Add-support-for-NI-Ettus-Research-Project-Su.patch \
     file://0002-configs-ni_sulfur_rev3-Add-tftp-port-selection.patch \
     "
