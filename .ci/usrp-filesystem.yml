@@ -88,7 +88,7 @@ parameters:
     - configs-poky
   - name: image
     type: string
-    default: deployment-image
+    default: gnuradio-image
     values:
     - deployment-image
     - developer-image
