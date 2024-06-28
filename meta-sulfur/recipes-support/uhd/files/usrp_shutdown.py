@@ -39,6 +39,7 @@ def main():
     db_id = get_dboard_id_from_eeprom(['rhodium'])
     if 'rhodium' not in db_id:
         exit()
+    get_main_logger()
     dtoverlay.apply_overlay_safe('n320')
     context = pyudev.Context()
     adapter = pyudev.Devices.from_sys_path(context, '/sys/class/i2c-adapter/i2c-9')
