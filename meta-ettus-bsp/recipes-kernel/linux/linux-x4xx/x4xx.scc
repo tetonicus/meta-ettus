@@ -49,3 +49,4 @@ patch 0001-arm64-zynqmp-add-support-for-Rev-7.patch
 patch 0001-nixge-add-support-for-ethtool-pause-control.patch
 patch 0045-net-axinet-sync-xilinx-ethernet-driver-to-tag-xlnx_r.patch
 patch 0046-net-axinet-Catch-error-if-devm_ioremap_resource-fail.patch
+patch 0047-Add-Xilinx-DPU-driver-to-kernel-build.patch

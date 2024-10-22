@@ -12,6 +12,8 @@ FILES:${PN}:ni-titanium = " \
     "
 FILES:${PN}-inventory:ni-titanium = "${UHD_IMAGES_INSTALL_PATH}/inventory.json"
 FILES:${PN}-firmware:ni-titanium = " \
+    /lib/firmware/x410.orig.bin \
+    /lib/firmware/x410.orig.dtbo \
     /lib/firmware/x410.bin \
     /lib/firmware/x410.dtbo \
     /lib/firmware/x440.bin \
@@ -44,14 +46,24 @@ UHD_FPGA_IMAGES_IN_FIRMWARE:ni-titanium ?= " \
 #     fi
 # }
 
+do_download_uhd_images:append:ni-titanium() {
+    if [ -n "${VITISAIFPGA}" ]; then
+        bbwarn "VITISAIFPGA variable found.\nCreating links to: ${VITISAIFPGA}/usrp_x410_fpga_X1_100 outputs\n In: ${UHD_IMAGES_DOWNLOAD_DIR}"
+        ln -sf "${VITISAIFPGA}/usrp_x410_fpga_X1_100.bit" "${UHD_IMAGES_DOWNLOAD_DIR}/usrp_x410_fpga_X1_100.bit"
+        ln -sf "${VITISAIFPGA}/usrp_x410_fpga_X1_100.dts" "${UHD_IMAGES_DOWNLOAD_DIR}/usrp_x410_fpga_X1_100.dts"
+    fi
+}
+
 do_install:append:ni-titanium() {
     install -d ${D}/${UHD_IMAGES_INSTALL_PATH}
     install -m 0644 ${UHD_IMAGES_DOWNLOAD_DIR}/usrp_x410_fpga*.* ${D}/${UHD_IMAGES_INSTALL_PATH}
     install -m 0644 ${UHD_IMAGES_DOWNLOAD_DIR}/usrp_x440_fpga*.* ${D}/${UHD_IMAGES_INSTALL_PATH}
     install -m 0644 ${UHD_IMAGES_DOWNLOAD_DIR}/inventory.json    ${D}/${UHD_IMAGES_INSTALL_PATH}
 
-    mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X410}.bin ${D}/lib/firmware/x410.bin
-    mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X410}.dtbo ${D}/lib/firmware/x410.dtbo
+    mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X410}.bin ${D}/lib/firmware/x410.orig.bin
+    mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X410}.dtbo ${D}/lib/firmware/x410.orig.dtbo
+    mv ${D}/lib/firmware/usrp_x410_fpga_X1_100.bin ${D}/lib/firmware/x410.bin
+    mv ${D}/lib/firmware/usrp_x410_fpga_X1_100.dtbo ${D}/lib/firmware/x410.dtbo
     mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X440}.bin ${D}/lib/firmware/x440.bin
     mv ${D}/lib/firmware/${DEFAULT_BITFILE_NAME_X440}.dtbo ${D}/lib/firmware/x440.dtbo
 }

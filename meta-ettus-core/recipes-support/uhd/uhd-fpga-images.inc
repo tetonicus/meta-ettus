@@ -23,7 +23,9 @@ UHD_IMAGES_INSTALL_PATH ?= "/usr/share/uhd/images"
 
 # FPGA images to include in the /lib/firmare directory
 # This variable needs to be appended with a machine specific overwrite
-UHD_FPGA_IMAGES_IN_FIRMWARE ??= ""
+UHD_FPGA_IMAGES_IN_FIRMWARE:ni-titanium:append = " \
+    usrp_x410_fpga_X1_100 \
+    "
 
 do_compile() {
     # the files are provided by uhd-fpga-images

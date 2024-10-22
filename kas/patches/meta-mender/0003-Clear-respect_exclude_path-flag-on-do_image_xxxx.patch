@@ -1,0 +1,27 @@
+From 5505d3cca92c373255ee26fc7ba536680148a457 Mon Sep 17 00:00:00 2001
+From: Mike Ruane <mruane@ltsnet.net>
+Date: Fri, 11 Oct 2024 16:02:22 +0000
+Subject: [PATCH] Clear respect_exclude_path flag on do_image_xxxx
+
+---
+ meta-mender-core/classes/mender-part-images.bbclass | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/meta-mender-core/classes/mender-part-images.bbclass b/meta-mender-core/classes/mender-part-images.bbclass
+index 79db2959..4a23fb09 100644
+--- a/meta-mender-core/classes/mender-part-images.bbclass
++++ b/meta-mender-core/classes/mender-part-images.bbclass
+@@ -348,6 +348,10 @@ do_image_sdimg[respect_exclude_path] = "0"
+ do_image_uefiimg[respect_exclude_path] = "0"
+ do_image_biosimg[respect_exclude_path] = "0"
+ do_image_gptimg[respect_exclude_path] = "0"
++do_image_tar[respect_exclude_path] = "0"
++do_image_ext4[respect_exclude_path] = "0"
++do_image_mender[respect_exclude_path] = "0"
++do_image_dataimg[respect_exclude_path] = "0"
+ 
+ ################################################################################
+ # Flash storage
+-- 
+2.39.2
+

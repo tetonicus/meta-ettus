@@ -26,7 +26,8 @@ repos:
       .: excluded
   meta-openembedded:
     url: https://github.com/openembedded/meta-openembedded
-    commit: 730e44900a0a86265bad93a16b5a5ff344a07266
+    # commit: 730e44900a0a86265bad93a16b5a5ff344a07266
+    commit: 52ecd66835dcfd8b4e55c9cb6325908ccea6a4e7
     path: meta-oe
     layers:
       meta-oe:
@@ -47,6 +48,10 @@ repos:
     path: oe-core
     layers:
       meta:
+    patches:
+      patch0:
+        repo: meta-ettus
+        path: kas/patches/oe-core/0001-wic-filemap-catch-StopIteration-from-next-iterator.patch
     # patches:
     #   patch0:
     #     repo: meta-ettus

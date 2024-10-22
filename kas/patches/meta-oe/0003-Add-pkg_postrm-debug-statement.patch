@@ -1,0 +1,24 @@
+From 00b4a9e5bd4c65e8d467621f491dcf808bc030d1 Mon Sep 17 00:00:00 2001
+From: Mike Ruane <mruane@ltsnet.net>
+Date: Wed, 4 Sep 2024 18:18:37 +0000
+Subject: [PATCH] Add pkg_postrm debug statement
+
+---
+ meta-oe/recipes-graphics/graphviz/graphviz_2.50.0.bb | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/meta-oe/recipes-graphics/graphviz/graphviz_2.50.0.bb b/meta-oe/recipes-graphics/graphviz/graphviz_2.50.0.bb
+index f21274e28..5de3d45db 100644
+--- a/meta-oe/recipes-graphics/graphviz/graphviz_2.50.0.bb
++++ b/meta-oe/recipes-graphics/graphviz/graphviz_2.50.0.bb
+@@ -98,6 +98,7 @@ pkg_postinst:${PN} () {
+ }
+ 
+ pkg_postrm:${PN} () {
++    echo -e "\n\n\n**************************************************************************\nDELETING GRAPHVIZ config6\n**************************************************************************\n\n\n"
+     rm -f $D${libdir}/graphviz/config*
+     rmdir --ignore-fail-on-non-empty $D${libdir}/graphviz
+ }
+-- 
+2.39.2
+

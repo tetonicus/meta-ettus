@@ -1,0 +1,53 @@
+header:
+  version: 10
+  includes:
+    - ../include/base-mender.yml
+machine: ni-titanium-rev5-mender
+env:
+  MENDER_ARTIFACT_NAME: git_x4xx
+target:
+  # - mc:zynqmp-pmufw:pmu-firmware
+  - mc:ni-titanium-ec:chromium-ec
+  #  - mc:ni-titanium:gnuradio-image
+  #  - mc:ni-titanium:developer-image
+  - mc:ni-titanium:vitis-ai-image
+local_conf_header:
+  vitisaifpga: |
+    VITISAIFPGA:pn-uhd-fpga-images = "/mnt/sdb1/workspace/projects/yolo-zynq/design/fpga/ettus_uhd/fpga/usrp3/top/x400/build"
+  "SDK deploy directory": |
+    SDK_DEPLOY:append = "/x4xx"
+repos:
+  meta-ettus:
+    layers:
+      meta-titanium:
+      meta-mender-titanium:
+  meta-openamp:
+    url: https://github.com/OpenAMP/meta-openamp
+    commit: 0dd544e649850d4cd95c1a1b9714a5238b41fc93
+    patches:
+      patch0:
+        repo: meta-ettus
+        path: kas/patches/meta-openamp/0001-layer-Add-warrior-to-compatible-layers.patch
+      patch1:
+        repo: meta-ettus
+        path: kas/patches/meta-openamp/0002-layer-Add-zeus-to-compatible-layers.patch
+      patch2:
+        repo: meta-ettus
+        path: kas/patches/meta-openamp/0003-conf-layer-comment-changed-LICENSE_PATH.patch
+      patch3:
+        repo: meta-ettus
+        path: kas/patches/meta-openamp/0004-change-syntax.patch
+  meta-stm32:
+    url: https://github.com/EttusResearch/meta-stm32
+    commit: 87aaa6b9b0f7186d0c1574a5322e14dc86a039e3
+  meta-xilinx:
+    url: https://github.com/Xilinx/meta-xilinx
+    commit: 06e35a434daf4427e4a3c3bb1144e1c8120cba2a
+    layers:
+      meta-xilinx-core:
+      meta-xilinx-bsp:
+      meta-xilinx-standalone:
+  meta-custom:
+    path: meta-custom
+    layers:
+      .:

@@ -31,7 +31,8 @@ repos:
       .: excluded
   meta-openembedded:
     url: https://github.com/openembedded/meta-openembedded
-    commit: 730e44900a0a86265bad93a16b5a5ff344a07266
+    # commit: 730e44900a0a86265bad93a16b5a5ff344a07266
+    commit: 52ecd66835dcfd8b4e55c9cb6325908ccea6a4e7
     path: meta-oe
     layers:
       meta-oe:
@@ -68,7 +69,8 @@ repos:
     #     path: kas/patches/oe-core/0002-microblaze-tune-Allow-no-version-to-be-set.patch
   meta-mender:
     url: https://github.com/mendersoftware/meta-mender
-    commit: f1e234a7c16898ec93e7161d29a6875153a70400
+    # commit: f1e234a7c16898ec93e7161d29a6875153a70400
+    commit: 9efa9409684e303472ed9dae749ab663909eb689
     layers:
       meta-mender-core:
     patches:
@@ -78,6 +80,9 @@ repos:
       patch1:
         repo: meta-ettus
         path: kas/patches/meta-mender/0002-systemd-don-t-set-SOURCE_DATE_EPOCH-to-0.patch
+      patch2:
+        repo: meta-ettus
+        path: kas/patches/meta-mender/0003-Clear-respect_exclude_path-flag-on-do_image_xxxx.patch
   meta-security:
     url: git://git.yoctoproject.org/meta-security
     commit: 1a3e42cedbd94ca73be45800d0e902fec35d0f0f
